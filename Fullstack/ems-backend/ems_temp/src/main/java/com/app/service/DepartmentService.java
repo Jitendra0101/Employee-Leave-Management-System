@@ -29,7 +29,7 @@ public class DepartmentService {
 	public Department getDeptById(Integer id) {
 
 		return departmentRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Department with given id : " + id + " does NOT exist !!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Department with id : " + id + ", does NOT exist !!"));
 
 	}
 
@@ -44,7 +44,7 @@ public class DepartmentService {
 			departmentRepository.deleteById(id);
 			return "successfully deleted";
 		} else {
-			return "department with given id doesnt exist !!!";
+			throw new ResourceNotFoundException("Department with Id : " + id + ", does NOT exist !!");
 		}
 	}
 

@@ -24,7 +24,7 @@ public class EmployeeService {
 	public Employee getEmpById(Integer id) {
 
 		return employeeRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee with given id : " + id + " does NOT exist !!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Employee with given id : " + id + ", does NOT exist !!"));
 
 	}
 
@@ -37,7 +37,7 @@ public class EmployeeService {
 	public String deleteEmp(Integer id) {
 
 		if (!employeeRepository.existsById(id))
-			return "employee with given id does NOT exist !!";
+			throw new ResourceNotFoundException("Employee with given id : " + id + ", does NOT exist !!");
 
 		employeeRepository.deleteById(id);
 		return "employee deleted Successfully !!";
