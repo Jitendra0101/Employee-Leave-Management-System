@@ -16,15 +16,14 @@ const ListDeptComponent = () => {
     return (
         <div className='container'>
 
-            <h2 className='text-center'>List of products</h2>
+            <h2 className='text-center'>List of Departments</h2>
 
             <table className='table table-striped table-bordered' style={{ width: 'fit-content' }}>
                 <thead>
                     <tr>
                         <th>department id</th>
-                        <th>product name</th>
-                        <th>product price</th>
-                        <th>product quantity</th>
+                        <th>department name</th>
+                        <th>department location</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,10 +37,7 @@ const ListDeptComponent = () => {
                                     {department.name}
                                 </td>
                                 <td>
-                                    {department.price}
-                                </td>
-                                <td>
-                                    {department.quantity}
+                                    {department.location}
                                 </td>
                             </tr>)
                     }

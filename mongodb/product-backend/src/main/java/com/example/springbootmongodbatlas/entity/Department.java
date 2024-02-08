@@ -11,15 +11,14 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Data
-@Document(collection ="products")
-public class Product {
+@Document(collection ="departments")
+public class Department {
 	
 	@Transient
-	public static final String SEQUENCE_NAME = "products_sequence";
+	public static final String SEQUENCE_NAME = "departments_sequence";
 	
     @Id
     private Integer id;
     private String name;
-    private double price;
-    private Integer quantity;
+    private String location;
 }
