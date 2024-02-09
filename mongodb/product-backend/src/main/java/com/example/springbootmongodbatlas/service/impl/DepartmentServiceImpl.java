@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
+	
 	@Autowired
 	private DepartmentRepository departmentRepository;
 
@@ -30,7 +31,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 	public Department addDept(Department dept) {
 		dept.setId(generatorServiceImpl.generateSequence(Department.SEQUENCE_NAME));
 		return departmentRepository.save(dept);
-
 	}
 
 	@Override
