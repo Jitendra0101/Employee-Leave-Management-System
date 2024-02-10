@@ -42,9 +42,7 @@ public class WorkerServiceImpl implements WorkerService {
 
 	@Override
 	public Worker updateWorker(Integer id, Worker worker) {
-
 		worker.setId(id);
 		return workerRepository.save(worker);
-		
 	}
 }

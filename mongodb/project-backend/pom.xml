@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>SpringbootMongodbAtlas</artifactId>
+    <artifactId>project_pgdac</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SpringbootMongodbAtlas</name>
-    <description>SpringbootMongodbAtlas</description>
+    <name>project_pgdac</name>
+    <description>pgdac project on ELMS</description>
     
     <properties>
         <java.version>17</java.version>
