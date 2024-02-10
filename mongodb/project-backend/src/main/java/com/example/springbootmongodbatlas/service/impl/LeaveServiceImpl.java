@@ -10,14 +10,13 @@ import com.example.springbootmongodbatlas.entity.Worker;
 import com.example.springbootmongodbatlas.repo.LeaveRepository;
 import com.example.springbootmongodbatlas.repo.WorkerRepository;
 import com.example.springbootmongodbatlas.service.LeaveService;
-import com.example.springbootmongodbatlas.service.WorkerService;
 
 @Service
 public class LeaveServiceImpl implements LeaveService {
 
 	@Autowired
 	private LeaveRepository leaveRepository;
-	
+
 	@Autowired
 	private WorkerRepository workerRepository;
 
@@ -25,8 +24,8 @@ public class LeaveServiceImpl implements LeaveService {
 	private SequenceGeneratorServiceImpl generatorServiceImpl;
 
 	@Override
-	public List<Leave> getAllLeaves() {
-		return leaveRepository.findAll();
+	public List<Leave> getAllLeaves(Integer workerId) {
+		return leaveRepository.findByWorkerid(workerId);
 	}
 
 	@Override
@@ -43,15 +42,18 @@ public class LeaveServiceImpl implements LeaveService {
 	}
 
 	@Override
-	public Leave deleteLeave(Integer id) {
-		Leave leave = leaveRepository.findById(id).get();
+	public Leave deleteLeave(Leave leave) {
 		leaveRepository.delete(leave);
 		return leave;
 	}
 
 	@Override
-	public Leave updateLeave(Leave leave, Integer id) {
-		leave.setId(id);
-		return leaveRepository.save(leave);
+	public Leave updateStatus(Leave leave, Worker worker, Integer id) {
+		Leave leave2 = leaveRepository.findById(id).get();
+		worker.removeLeave(leave2);
+		leave2.setStatus(leave.getStatus());
+		worker.addLeave(leave2);
+		workerRepository.save(worker);
+		return leaveRepository.save(leave2);
 	}
 }
