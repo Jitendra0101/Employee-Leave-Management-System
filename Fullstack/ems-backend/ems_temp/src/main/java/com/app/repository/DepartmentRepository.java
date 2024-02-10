@@ -7,5 +7,5 @@ import com.app.model.Department;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Integer>{
-	
+
 }
