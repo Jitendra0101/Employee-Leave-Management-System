@@ -7,5 +7,5 @@ import com.example.springbootmongodbatlas.entity.Worker;
 
 @Repository
 public interface WorkerRepository extends MongoRepository<Worker, Integer> {
-
+	
 }
