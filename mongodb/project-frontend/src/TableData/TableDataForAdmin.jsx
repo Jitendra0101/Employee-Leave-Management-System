@@ -8,7 +8,7 @@ const TableDataForAdmin = ({ workersList }) => {
                 <table className="table table-striped table-bordered" style={{ width: 'fit-content' }}>
                     <thead>
                         <tr>
-                            <th>Worker id</th>
+                            <th>Sr. No</th>
                             <th>Worker user name</th>
                             <th>Worker email</th>
                             <th>Worker designation</th>
@@ -16,9 +16,9 @@ const TableDataForAdmin = ({ workersList }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {workersList.map(worker =>
+                        {workersList.map((worker, index) =>
                             <tr key={worker.id}>
-                                <td>{worker.id}</td>
+                                <td>{index + 1}</td>
                                 <td>{worker.userName}</td>
                                 <td>{worker.email}</td>
                                 <td>{worker.designation}</td>

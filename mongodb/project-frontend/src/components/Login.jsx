@@ -23,15 +23,15 @@ function Login() {
         if (loggedIn && worker) {
             switch (worker.designation) {
                 case "ADMIN":
-                    navigate("/admin");
+                    navigate("/admin", { state: { loggedIn: loggedIn } });
                     break;
 
                 case "EMPLOYEE":
-                    navigate("/employee");
+                    navigate("/employee", { state: { loggedIn: loggedIn } });
                     break;
 
                 case "HR":
-                    navigate("/hr");
+                    navigate("/hr", { state: { loggedIn: loggedIn } });
                     break;
 
                 default:
@@ -41,6 +41,7 @@ function Login() {
     }, [loggedIn, worker, navigate]);
 
     const handleGoBack = () => {
+        setLoggedIn(false);
         navigate("/");
     }
 

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { listWorkers } from '../services/WorkerService';
-import TableDataForAdmin from '../TableData/TableDataForAdmin';
 import { useNavigate } from "react-router-dom";
+import TableDataForEmployee from '../TableData/TableDataForEmployee';
+import { listLeavesByWorkerId } from '../services/GetLeaveByWorkerid';
 
-const AdminDashboard = () => {
+const EmployeeDashboard = () => {
 
     const navigate = useNavigate();
-    const [workers, setWorkers] = useState([]);
+    const [leaves, setLeaves] = useState([]);
 
     useEffect(() => {
-        listWorkers().then((resp) => {
-            setWorkers(resp.data);
+        listLeavesByWorkerId().then((resp) => {
+            setLeaves(resp.data);
         }).catch(error => {
             console.error(error);
         });
@@ -20,8 +20,8 @@ const AdminDashboard = () => {
         navigate("/");
     }
 
-    const handleAddWorker = () => {
-        navigate("/addworker");
+    const handleAddLeave = () => {
+        navigate("/addleave");
     }
 
     // useEffect(() => {
@@ -52,8 +52,8 @@ const AdminDashboard = () => {
                     <div className="navbar-end">
                         <div className="navbar-item">
                             <div className="buttons">
-                                <button className="button is-primary" onClick={handleAddWorker} style={{ marginRight: '10px', borderRadius: '9px', height: '45px', fontSize: '18px' }}>
-                                    <strong>Add Worker</strong>
+                                <button className="button is-primary" onClick={handleAddLeave} style={{ marginRight: '10px', borderRadius: '9px', height: '45px', fontSize: '18px' }}>
+                                    <strong>Add Leave</strong>
                                 </button>
                                 <button className="button is-primary" onClick={handleLogOut} style={{ marginRight: '30px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
                                     <strong>Logout</strong>
@@ -77,11 +77,11 @@ const AdminDashboard = () => {
             </ul> */}
 
             <div className='mt-4'>
-                <TableDataForAdmin workersList={workers} />
+                <TableDataForEmployee leaveList={leaves} />
             </div>
 
         </div>
     )
 }
 
-export default AdminDashboard
+export default EmployeeDashboard
