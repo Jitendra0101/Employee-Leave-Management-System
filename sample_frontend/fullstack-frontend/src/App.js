@@ -9,18 +9,18 @@ import ViewUser from './users/ViewUser';
 
 function App() {
   return <div className="App">
-<Router>
-  <Navbar/>
-  <Routes>
-    <Route exact path = "/" element={<Home/>}/>
-    <Route exact path='/adduser' element={<AddUser />}></Route>
-    <Route exact path='/viewuser/:id' element={<ViewUser/>}></Route>
-    <Route exact path='/edituser/:id' element={<EditUser/>}/>
-  </Routes>
-  
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route exact path='/adduser' element={<AddUser />}></Route>
+        <Route exact path='/viewuser/:id' element={<ViewUser />} />
+        <Route exact path='/edituser/:id' element={<EditUser />} />
+      </Routes>
 
-</Router>
-    </div>
+
+    </Router>
+  </div>
 }
 
 export default App;
