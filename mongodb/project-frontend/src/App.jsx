@@ -8,6 +8,7 @@ import AddEmployee from './components/AddEmployee';
 import HrDashboard from './components/HrDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
 import AddLeave from './components/AddLeave';
+import ViewWorker from './components/ViewWorker';
 
 function App() {
   return (
@@ -22,8 +23,8 @@ function App() {
           <Route path="/addleave" element={<AddLeave />} />
           <Route path="/hr" element={<HrDashboard />} />
           <Route path="/employee" element={<EmployeeDashboard />} />
-          {/* <Route exact path='/viewuser/:id' element={<ViewUser />} />
-          <Route exact path='/edituser/:id' element={<EditUser />} /> */}
+          <Route exact path='/viewworker/:id' element={<ViewWorker />} />
+          {/* <Route exact path='/editworker/:id' element={<EditWorker />} /> */}
         </Routes>
       </Router>
     </div>
