@@ -9,21 +9,28 @@ export default function AddUser() {
   let navigate = useNavigate()
 
   const [user, setUser] = useState({
-    name:"",
-    username:"",
-    email:""
+    
+    userName:"",
+    email:"", 
+    password: "",
+    designation: "",
+    joinDate: ""
   })
 
-  const{name, username, email}=user
+  
+  const onInputChange=(event)=>{
+    console.log("=>>>",event.target.name , event.target.value)
+    // const{userName,value}=event.target;
 
-  const onInputChange=(e)=>{
-    setUser({...user,[e.target.name]: e.target.value})  //spread operator keeps on adding new objects
+
+    setUser({...user,[event.target.name]: event.target.value})  //spread operator keeps on adding new objects
   }
 
   const onSubmit= async(e)=>{
     e.preventDefault();
-    await axios.post("http://localhost:8080/user", user);
-    navigate("/")
+
+    console.log(await axios.post("http://localhost:6900/api/workers/addWorker", user))
+    // navigate("/home")
   }
 
 
@@ -35,25 +42,45 @@ export default function AddUser() {
         <div className='col-md-6  border rounded p-4 mt-2 shadow'>
           <h2 className='text-center m-4'>Register User</h2>  
 
-          <form onSubmit={(e)=>onSubmit(e)}>
+          <form onSubmit={console.log(user)}>
 
           
           <div className='mb-3'>
-            <label htmlFor="Name" className='form-label'>Full Name: </label>
-            <input type={"text"} className='form-control' placeholder='Enter Full Name' name ='name' value={name}
-            onChange={(e)=>onInputChange(e)}/>
+            <label htmlFor="userName" className='form-label'>UserName: </label>
+            <input type={"text"} className='form-control' placeholder='Enter Username' name ='userName'
+            onChange={onInputChange}/>
           </div>
           <div className='mb-3'>
-            <label htmlFor="Username" className='form-label'>User Name: </label>
-            <input type={"text"} className='form-control' placeholder='Enter User Name' name ='username' value={username}
-            onChange={(e)=>onInputChange(e)}/>
+            <label htmlFor="password" className='form-label'>Password</label>
+            <input type={"text"} className='form-control' placeholder='Enter Password' name ='password'
+            onChange={onInputChange}/>
           </div>
+          
           <div className='mb-3'>
             <label htmlFor="Email" className='form-label'>E-mail: </label>
-            <input type={"text"} className='form-control' placeholder='Enter Email address' name ='email' value={email}
-            onChange={(e)=>onInputChange(e)}/>
+            <input type={"text"} className='form-control' placeholder='Enter Email address' name ='email' 
+            onChange={onInputChange}/>
           </div>
-          <button type='submit' className='btn btn-outline-primary'>Submit</button>
+
+          <div className='mb-3'>
+            <label htmlFor="joinDate" className='form-label'>join Date </label>
+            <input type={"date"} className='form-control' placeholder='Enter Joining Date' name ='joinDate'
+            onChange={onInputChange}/>
+          </div>
+
+          <div className='mb-3'>
+            <label htmlFor="designation" className='form-label'>designation</label>
+            <select type={"date"} className='form-control' placeholder='Enter Joining Date' name ='designation'
+
+             onChange={onInputChange}> 
+            <option value="">Select an option</option>
+        <option value="ADMIN">ADMIN</option>
+        <option value="HR">HR</option>
+        <option value="EMPLOYEE">EMPLOYEE</option>
+            </select>
+          </div>
+          
+          <button type='submit' className='btn btn-outline-primary' onClick={onSubmit}>Submit</button>
           <Link className='btn btn-outline-danger mx-2' to ="/home">Cancel</Link>
           </form>
         </div>

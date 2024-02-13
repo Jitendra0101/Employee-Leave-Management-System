@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import NavbarAD from '../layout/AdminLayout/NavbarAD';
 import '../CSS/Login.css'
 import { listWorkers } from '../service/WorkerService';
+import Login from './Login';
 
 export default function Home() {
     // const [users, setUsers] = useState([]);
@@ -42,13 +43,15 @@ export default function Home() {
     //   loadUsers();
     // }
 
-  return (
+  return  (
+    <>
+     
     <div className=''>
     <NavbarAD />
     <div className='container '>
       
         <div className='py-4'>
-        <table className="table border shadow">
+      <table className="table border shadow">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -56,6 +59,8 @@ export default function Home() {
       <th scope="col">email</th>
       <th scope="col">Designation</th>
       <th scope="col">Join-Date</th>
+      <th scope="col">sickLeaveBalance</th>
+
     </tr>
   </thead>
   <tbody>
@@ -67,6 +72,7 @@ export default function Home() {
             <td>{user.email}</td>
             <td>{user.designation}</td>
             <td>{user.joinDate}</td>
+            <td>{user.sickLeaveBalance}</td>
             {/* <td>
                 <Link className='btn btn-primary mx-2' to={`/viewUser/${user.id}`}>View</Link>
                 <Link className='btn btn-outline-primary mx-2' to={`/editUser/${user.id}`}>Edit</Link>
@@ -81,5 +87,6 @@ export default function Home() {
 
     </div>
     </div>
+    </>
   )
 }
