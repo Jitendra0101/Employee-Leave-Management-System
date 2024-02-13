@@ -1,5 +1,6 @@
 package com.app.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -54,4 +55,8 @@ public class LeaveService {
 		return "Leave canceled Successfully !!";
 
 	}
+	public List<Leave> getAllLeavesByStartDate(Employee emp, LocalDate startDate) {
+		return leaveRepository. findByEmployeeAndStartDate(emp, startDate);
+	}
+	
 }

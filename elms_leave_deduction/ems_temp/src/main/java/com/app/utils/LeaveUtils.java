@@ -2,11 +2,14 @@ package com.app.utils;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 
 import com.app.exceptions.InvalidInputException;
 import com.app.model.Employee;
+import com.app.model.Leave;
 import com.app.model.LeaveType;
 import com.app.service.EmployeeService;
+import com.app.service.LeaveService;
 
 public class LeaveUtils {
 	public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate) {
@@ -60,5 +63,18 @@ public class LeaveUtils {
 		// Update the employee entity in the database
 	    employeeService.updateEmpById(emp, empid);
 	}
+public static boolean doesLeaveWithSameStartDateExist(Leave newLeave, Employee employee,LeaveService leaveService) {
+		
+		Long empId = employee.getId();
+		LocalDate startDate = newLeave.getStartDate();
+	    List<Leave> existingLeaves = leaveService.getAllLeavesByStartDate(employee, startDate);
 
+	    for (Leave existingLeave : existingLeaves) {
+	        if (newLeave.getStartDate().isEqual(existingLeave.getStartDate())) {
+	            return true; 
+	    }
+	    
+	}
+	    return false; 
+}
 }

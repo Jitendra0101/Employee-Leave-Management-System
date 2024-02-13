@@ -2,6 +2,7 @@ package com.app.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,10 @@ public class LeaveController {
 			return new ResponseEntity<>("Insufficient leave balance", HttpStatus.BAD_REQUEST);
 		}
 
+		if(doesLeaveWithSameStartDateExist(leave,emp,leaveService)) {
+			return new ResponseEntity<>("Leave startDate overlapping with already applied leave", HttpStatus.BAD_REQUEST);
+			
+			}
 		deductLeaveBalance(emp, leaveType, leaveDurationInDays, employeeService);
 
 		return new ResponseEntity<>(leaveService.applyLeave(leave, emp), HttpStatus.OK);
