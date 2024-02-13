@@ -2,45 +2,41 @@ import React, { useState, useEffect } from 'react';
 import { listWorkers } from '../services/WorkerService';
 import TableDataForAdmin from '../TableData/TableDataForAdmin';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const AdminDashboard = () => {
-
     const navigate = useNavigate();
     const [workers, setWorkers] = useState([]);
 
     useEffect(() => {
-        listWorkers().then((resp) => {
-            setWorkers(resp.data);
-        }).catch(error => {
-            console.error(error);
-        });
+        loadWorkers();
     }, []);
+
+    const loadWorkers = async () => {
+        try {
+            const response = await listWorkers();
+            setWorkers(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleLogOut = () => {
         navigate("/");
-    }
+    };
 
     const handleAddWorker = () => {
         navigate("/addworker");
-    }
+    };
 
-    // useEffect(() => {
-    //     // Fetch workers data from backend upon component mount
-    //     // You can use fetch or axios for making HTTP requests
-    //     // Update workers state with the fetched data
-    // }, []);
-
-    // const handleCreate = () => {
-    //     // Implement create operation
-    // };
-
-    // const handleUpdate = (username) => {
-    //     // Implement update operation
-    // };
-
-    // const handleDelete = (username) => {
-    //     // Implement delete operation
-    // };
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:6900/api/workers/${id}`);
+            loadWorkers();
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <div>
@@ -64,24 +60,12 @@ const AdminDashboard = () => {
                 </div>
             </nav>
 
-
-            {/* <button onClick={handleCreate}>Create Worker</button>
-            <ul>
-                {workers.map((worker) => (
-                    <li key={worker.username}>
-                        {worker.username} - {worker.designation}
-                        <button onClick={() => handleUpdate(worker.username)}>Edit</button>
-                        <button onClick={() => handleDelete(worker.username)}>Delete</button>
-                    </li>
-                ))}
-            </ul> */}
-
             <div className='mt-4'>
-                <TableDataForAdmin workersList={workers} />
+                <TableDataForAdmin workersList={workers} onDelete={handleDelete} />
             </div>
 
         </div>
-    )
-}
+    );
+};
 
-export default AdminDashboard
+export default AdminDashboard;
