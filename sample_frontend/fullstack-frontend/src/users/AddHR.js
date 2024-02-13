@@ -2,9 +2,9 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import {Link, useNavigate } from 'react-router-dom'
 import NavbarAD from '../layout/AdminLayout/NavbarAD'
+import "../CSS/Login.css"
 
-
-export default function AddUser() {
+export default function AddHr() {
   
   let navigate = useNavigate()
 
@@ -29,11 +29,11 @@ export default function AddUser() {
 
   return (
     <><NavbarAD />
-    <div className='container'>
+    <div id="consts" className='container'>
       
       <div id="conts" className="container d-flex justify-content-center align-items-center" style={{height:'80vh'}}>
         <div className='col-md-6  border rounded p-4 mt-2 shadow'>
-          <h2 className='text-center m-4'>Register User</h2>  
+          <h2 className='text-center m-4'>Add HR</h2>  
 
           <form onSubmit={(e)=>onSubmit(e)}>
 

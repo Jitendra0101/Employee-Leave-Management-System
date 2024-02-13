@@ -2,6 +2,8 @@ package com.example.springbootmongodbatlas.controller;
 
 import java.util.List;
 
+import static com.example.springbootmongodbatlas.utils.LeaveUtils.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,15 +13,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.example.springbootmongodbatlas.dto.LeaveDto;
 import com.example.springbootmongodbatlas.entity.Leave;
 import com.example.springbootmongodbatlas.entity.LeaveType;
 import com.example.springbootmongodbatlas.entity.Worker;
+import com.example.springbootmongodbatlas.exceptions.InvalidInputException;
 import com.example.springbootmongodbatlas.repo.WorkerRepository;
 import com.example.springbootmongodbatlas.service.LeaveService;
 import com.example.springbootmongodbatlas.service.WorkerService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/{workerId}/leaves")
 public class LeaveController {
@@ -34,7 +39,8 @@ public class LeaveController {
 	private WorkerRepository workerRepository;
 
 	@PostMapping("/apply")
-	public Leave applyLeave(@RequestBody LeaveDto leaveDto, @PathVariable Integer workerId) {
+	public Leave applyLeave(@RequestBody LeaveDto leaveDto, @PathVariable Integer workerId)
+			throws InvalidInputException {
 
 		LeaveType leaveType = LeaveType.valueOf(leaveDto.getLeaveType().toUpperCase());
 		Worker worker = workerService.getWorkerById(workerId);
@@ -46,6 +52,13 @@ public class LeaveController {
 		leave.setLeaveType(leaveType);
 		leave.setReason(leaveDto.getReason());
 		leave.setWorkerid(workerId);
+
+		int leaveDurationInDays = calculateLeaveDurationInDays(leaveDto.getStartDate(), leaveDto.getEndDate());
+		if (!hasSufficientLeaveBalance(worker, leaveType, leaveDurationInDays)) {
+			return null;
+		}
+
+		deductLeaveBalance(worker, leaveType, leaveDurationInDays, workerService);
 
 		return leaveService.addLeave(leave, worker);
 	}
