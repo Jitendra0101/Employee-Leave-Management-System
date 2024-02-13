@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import { listWorkers } from '../services/WorkerService';
-import TableDataForAdmin from '../TableData/TableDataForAdmin';
-import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
-
     const navigate = useNavigate();
     const [workers, setWorkers] = useState([]);
 
@@ -16,31 +14,9 @@ const AdminDashboard = () => {
         });
     }, []);
 
-    const handleLogOut = () => {
-        navigate("/");
-    }
-
     const handleAddWorker = () => {
         navigate("/addworker");
     }
-
-    // useEffect(() => {
-    //     // Fetch workers data from backend upon component mount
-    //     // You can use fetch or axios for making HTTP requests
-    //     // Update workers state with the fetched data
-    // }, []);
-
-    // const handleCreate = () => {
-    //     // Implement create operation
-    // };
-
-    // const handleUpdate = (username) => {
-    //     // Implement update operation
-    // };
-
-    // const handleDelete = (username) => {
-    //     // Implement delete operation
-    // };
 
     return (
         <div>
@@ -52,10 +28,10 @@ const AdminDashboard = () => {
                     <div className="navbar-end">
                         <div className="navbar-item">
                             <div className="buttons">
-                                <button className="button is-primary" onClick={handleAddWorker} style={{ marginRight: '10px', borderRadius: '9px', height: '45px', fontSize: '18px' }}>
+                                <button onClick={handleAddWorker} className="button is-primary" style={{ marginRight: '10px', borderRadius: '9px', height: '45px', fontSize: '18px' }}>
                                     <strong>Add Worker</strong>
                                 </button>
-                                <button className="button is-primary" onClick={handleLogOut} style={{ marginRight: '30px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                <button className="button is-primary" onClick={() => navigate("/")} style={{ marginRight: '30px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
                                     <strong>Logout</strong>
                                 </button>
                             </div>
@@ -64,24 +40,42 @@ const AdminDashboard = () => {
                 </div>
             </nav>
 
-
-            {/* <button onClick={handleCreate}>Create Worker</button>
-            <ul>
-                {workers.map((worker) => (
-                    <li key={worker.username}>
-                        {worker.username} - {worker.designation}
-                        <button onClick={() => handleUpdate(worker.username)}>Edit</button>
-                        <button onClick={() => handleDelete(worker.username)}>Delete</button>
-                    </li>
-                ))}
-            </ul> */}
-
             <div className='mt-4'>
-                <TableDataForAdmin workersList={workers} />
+                <div className='py-4' style={{ width: '80%', margin: '0 auto' }}>
+                    <table className='table table-bordered table-hover'>
+                        <thead className="thead-dark">
+                            <tr>
+                                <th scope='col'>Sr. No</th>
+                                <th scope='col'>Worker User Name</th>
+                                <th scope='col'>Worker Email</th>
+                                <th scope='col'>Worker Designation</th>
+                                <th scope='col'>Worker Joining Date</th>
+                                <th scope='col'>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                workers.map((worker, index) => (
+                                    <tr key={worker.id}>
+                                        <th scope="row">{index + 1}</th>
+                                        <td>{worker.userName}</td>
+                                        <td>{worker.email}</td>
+                                        <td>{worker.designation}</td>
+                                        <td>{worker.joinDate}</td>
+                                        <td>
+                                            <Link className='btn btn-primary mx-2' to={`/viewWorker/${worker.id}`}>View</Link>
+                                            <Link className='btn btn-outline-primary mx-2' to={`/editWorker/${worker.id}`}>Edit</Link>
+                                            <button className='btn btn-danger mx-2'>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
         </div>
     )
 }
 
-export default AdminDashboard
+export default AdminDashboard;

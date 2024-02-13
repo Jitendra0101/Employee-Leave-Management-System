@@ -9,12 +9,12 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Document(collection = "leaves")
+@Data
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class Leave {
 	
 	@Transient

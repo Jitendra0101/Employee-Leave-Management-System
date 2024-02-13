@@ -23,6 +23,12 @@ const TableDataForAdmin = ({ workersList }) => {
                                 <td>{worker.email}</td>
                                 <td>{worker.designation}</td>
                                 <td>{worker.joinDate}</td>
+
+                                <td>
+                                            <Link className='btn btn-primary mx-2' to={`/viewWorker/${worker.id}`}>View</Link>
+                                            <Link className='btn btn-outline-primary mx-2' to={`/editWorker/${worker.id}`}>Edit</Link>
+                                            <button className='btn btn-danger mx-2'>Delete</button>
+                                        </td>
                             </tr>
                         )}
                     </tbody>
