@@ -42,7 +42,12 @@ public class WorkerServiceImpl implements WorkerService {
 
 	@Override
 	public Worker updateWorker(Integer id, Worker worker) {
-		worker.setId(id);
-		return workerRepository.save(worker);
+		Worker worker2 = workerRepository.findById(id).get();
+		worker2.setUserName(worker.getUserName());
+		worker2.setEmail(worker.getEmail());
+		worker2.setDesignation(worker.getDesignation());
+		worker2.setJoinDate(worker.getJoinDate());
+
+		return workerRepository.save(worker2);
 	}
 }

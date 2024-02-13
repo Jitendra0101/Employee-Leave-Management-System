@@ -20,7 +20,6 @@ const TableDataForAdmin = ({ workersList, onDelete }) => {
         }
     }
 
-    // Inside TableDataForAdmin component
     const handleDelete = async (id) => {
         try {
             await onDelete(id);
