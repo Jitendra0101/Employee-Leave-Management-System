@@ -26,7 +26,7 @@ public class WorkerController {
 		return workerService.getWorkerById(id);
 	}
 
-	@PostMapping
+	@PostMapping("/addWorker")
 	public Worker addWorker(@RequestBody Worker worker) {
 		return workerService.addWorker(worker);
 	}
