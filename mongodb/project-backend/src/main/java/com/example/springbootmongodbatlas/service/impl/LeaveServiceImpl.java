@@ -1,5 +1,6 @@
 package com.example.springbootmongodbatlas.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,10 @@ public class LeaveServiceImpl implements LeaveService {
 		worker.addLeave(leave2);
 		workerRepository.save(worker);
 		return leaveRepository.save(leave2);
+	}
+
+	@Override
+	public List<Leave> getAllLeavesByStartDate(Integer workerid, LocalDate startDate) {
+		return leaveRepository.findByWorkeridAndStartDate(workerid, startDate);
 	}
 }

@@ -2,15 +2,19 @@ package com.example.springbootmongodbatlas.utils;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 
+import com.example.springbootmongodbatlas.entity.Leave;
 import com.example.springbootmongodbatlas.entity.LeaveType;
 import com.example.springbootmongodbatlas.entity.Worker;
 import com.example.springbootmongodbatlas.exceptions.InvalidInputException;
+import com.example.springbootmongodbatlas.service.LeaveService;
 import com.example.springbootmongodbatlas.service.WorkerService;
 
 public class LeaveUtils {
 
-	public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate) throws InvalidInputException {
+	public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate)
+			throws InvalidInputException {
 
 		if (startDate.isBefore(endDate)) {
 			Period period = Period.between(startDate, endDate);
@@ -61,6 +65,21 @@ public class LeaveUtils {
 
 		// Update the employee entity in the database
 		workerService.updateWorker(workerid, worker);
+	}
+
+	public static boolean doesLeaveWithSameStartDateExist(Leave newLeave, Worker worker, LeaveService leaveService) {
+
+		Integer workerid = worker.getId();
+		LocalDate startDate = newLeave.getStartDate();
+		List<Leave> existingLeaves = leaveService.getAllLeavesByStartDate(workerid, startDate);
+
+		for (Leave existingLeave : existingLeaves) {
+			if (newLeave.getStartDate().isEqual(existingLeave.getStartDate())) {
+				return true;
+			}
+
+		}
+		return false;
 	}
 
 }
