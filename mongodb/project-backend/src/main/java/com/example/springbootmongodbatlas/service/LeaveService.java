@@ -1,5 +1,6 @@
 package com.example.springbootmongodbatlas.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.example.springbootmongodbatlas.entity.Leave;
@@ -16,5 +17,7 @@ public interface LeaveService {
 	public Leave deleteLeave(Leave leave);
 	
 	public Leave updateStatus(Leave leave, Worker worker, Integer id);
+
+	public List<Leave> getAllLeavesByStartDate(Integer workerid, LocalDate startDate);
 	
 }

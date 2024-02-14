@@ -54,7 +54,12 @@ public class LeaveController {
 		leave.setWorkerid(workerId);
 
 		int leaveDurationInDays = calculateLeaveDurationInDays(leaveDto.getStartDate(), leaveDto.getEndDate());
+
 		if (!hasSufficientLeaveBalance(worker, leaveType, leaveDurationInDays)) {
+			return null;
+		}
+
+		if (doesLeaveWithSameStartDateExist(leave, worker, leaveService)) {
 			return null;
 		}
 
