@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
-const TableDataForHr = ({ workersList }) => {
+import { Link } from 'react-router-dom';
+const TableDataForHr = ({ workersList,onDeleteHr }) => {
     const [filteredWorkers, setFilteredWorkers] = useState([]);
 
     useEffect(() => {
@@ -8,6 +8,13 @@ const TableDataForHr = ({ workersList }) => {
         setFilteredWorkers(nonAdminWorkers);
     }, [workersList]);
 
+    const handleDelete = async (id) => {
+        try {
+            await onDeleteHr(id);
+        } catch (error) {
+            console.error(error);
+        }
+    };
     return (
         <div>
             <h2 className='text-center' style={{ marginBottom: '40px', marginTop: '20px' }}>Hr DashBoard</h2>
@@ -20,6 +27,8 @@ const TableDataForHr = ({ workersList }) => {
                             <th>Worker email</th>
                             <th>Worker designation</th>
                             <th>Worker joining date</th>
+                            <th style={{ textAlign: 'center' }}>Actions</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -30,6 +39,17 @@ const TableDataForHr = ({ workersList }) => {
                                 <td>{worker.email}</td>
                                 <td>{worker.designation}</td>
                                 <td>{worker.joinDate}</td>
+                                <td>
+                                    <Link className="btn btn-primary" to={`/viewworker/${worker.id}`} style={{ marginLeft: '10px', marginRight: '20px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                        View
+                                    </Link>
+                                    <Link className="btn btn-secondary" to={`/editworker/${worker.id}`} style={{ marginRight: '20px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                        Edit
+                                    </Link>
+                                    <button className="btn btn-danger" onClick={(e) => handleDelete(worker.id)} style={{ marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                         )}
 

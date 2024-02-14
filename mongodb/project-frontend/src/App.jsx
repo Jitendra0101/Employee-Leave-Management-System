@@ -10,7 +10,7 @@ import AddLeave from './components/AddLeave';
 import ViewWorker from './components/WorkerActions/ViewWorker';
 import EditWorker from './components/WorkerActions/EditWorker';
 import MyDetails from './components/EmployeeActions/MyDetails';
-
+import AddEmployee from './components/WorkerActions/AddEmployee'
 function App() {
   return (
     <div>
@@ -20,6 +20,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/addworker" element={<AddWorker />} />
+          <Route path="/addemployee" element={<AddEmployee />} />
           <Route path="/employee/:id/addleave" element={<AddLeave />} />
           <Route path="/hr" element={<HrDashboard />} />
           <Route path="/employee/:id" element={<EmployeeDashboard />} />

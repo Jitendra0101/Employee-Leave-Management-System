@@ -2,24 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { listWorkers } from '../services/WorkerService';
 import { useNavigate } from "react-router-dom";
 import TableDataForHr from '../TableData/TableDataForHr';
-
+import axios from 'axios';
 const HrDashboard = () => {
 
     const navigate = useNavigate();
     const [workers, setWorkers] = useState([]);
 
     useEffect(() => {
-        listWorkers().then((resp) => {
-            setWorkers(resp.data);
-        }).catch(error => {
-            console.error(error);
-        });
+        loadWorkers()
     }, []);
+
+
+    const loadWorkers = async () => {
+        try {
+            const response = await listWorkers();
+            setWorkers(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleLogOut = () => {
         navigate("/");
     }
-
+    const handleDeleteHr = async (id) => {
+        try {
+            await axios.delete(`http://localhost:6900/api/workers/${id}`);
+            loadWorkers();
+        } catch (error) {
+            console.error(error);
+        }
+    };
     const handleAddEmployee = () => {
         navigate("/addemployee");
     }
@@ -52,6 +65,9 @@ const HrDashboard = () => {
                     <div className="navbar-end">
                         <div className="navbar-item">
                             <div className="buttons">
+                            <button className="button is-primary"  style={{ marginRight: '10px', borderRadius: '9px', height: '45px', fontSize: '18px' }}>
+                                    <strong>View Leaves</strong>
+                                </button>
                                 <button className="button is-primary" onClick={handleAddEmployee} style={{ marginRight: '10px', borderRadius: '9px', height: '45px', fontSize: '18px' }}>
                                     <strong>Add Employee</strong>
                                 </button>
@@ -77,7 +93,7 @@ const HrDashboard = () => {
             </ul> */}
 
             <div className='mt-4'>
-                <TableDataForHr workersList={workers} />
+                <TableDataForHr workersList={workers}  onDeleteHr={handleDeleteHr}/>
             </div>
 
         </div>
