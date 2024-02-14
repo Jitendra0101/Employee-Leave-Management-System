@@ -1,16 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/Login'; // Import the Login component
+import Login from './components/Login';
 import HomePage from './components/HomePage';
-import AdminDashboard from './components/AdminDashboard'; // Import the AdminDashboard component
+import AdminDashboard from './components/AdminDashboard';
 import AddWorker from './components/WorkerActions/AddWorker';
 import HrDashboard from './components/HrDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
-import AddLeave from './components/AddLeave';
 import ViewWorker from './components/WorkerActions/ViewWorker';
 import EditWorker from './components/WorkerActions/EditWorker';
 import MyDetails from './components/EmployeeActions/MyDetails';
-import AddEmployee from './components/WorkerActions/AddEmployee'
+import AddEmployee from './components/WorkerActions/AddEmployee';
+import AddLeave from './components/EmployeeActions/AddLeave';
+
 function App() {
   return (
     <div>
