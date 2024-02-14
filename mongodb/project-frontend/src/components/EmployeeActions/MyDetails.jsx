@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const ViewWorker = () => {
-
+const MyDetails = () => {
     const [totalLeaves, setTotalLeaves] = useState(0);
     const [worker, setWorker] = useState({})
 
@@ -59,4 +59,4 @@ const ViewWorker = () => {
     )
 }
 
-export default ViewWorker
+export default MyDetails

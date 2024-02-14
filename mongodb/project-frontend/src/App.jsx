@@ -9,6 +9,7 @@ import EmployeeDashboard from './components/EmployeeDashboard';
 import AddLeave from './components/AddLeave';
 import ViewWorker from './components/WorkerActions/ViewWorker';
 import EditWorker from './components/WorkerActions/EditWorker';
+import MyDetails from './components/EmployeeActions/MyDetails';
 
 function App() {
   return (
@@ -19,11 +20,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/addworker" element={<AddWorker />} />
-          <Route path="/addleave" element={<AddLeave />} />
+          <Route path="/employee/:id/addleave" element={<AddLeave />} />
           <Route path="/hr" element={<HrDashboard />} />
-          <Route path="/employee" element={<EmployeeDashboard />} />
+          <Route path="/employee/:id" element={<EmployeeDashboard />} />
           <Route exact path='/viewworker/:id' element={<ViewWorker />} />
           <Route exact path='/editworker/:id' element={<EditWorker />} />
+          <Route exact path='/employee/:id/details' element={<MyDetails />} />
         </Routes>
       </Router>
     </div>

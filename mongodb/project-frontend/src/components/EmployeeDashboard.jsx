@@ -1,46 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import TableDataForEmployee from '../TableData/TableDataForEmployee';
-import { listLeavesByWorkerId } from '../services/GetLeaveByWorkerid';
+import axios from 'axios';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const EmployeeDashboard = () => {
-
     const navigate = useNavigate();
     const [leaves, setLeaves] = useState([]);
+    const [worker, setWorker] = useState({});
+    const { id } = useParams();
 
     useEffect(() => {
-        listLeavesByWorkerId().then((resp) => {
-            setLeaves(resp.data);
-        }).catch(error => {
-            console.error(error);
-        });
-    }, []);
+        loadLeaves()
+        loadWorker()
+    }, [])
+
+    const loadLeaves = async () => {
+        try {
+            const response = await axios.get(`http://localhost:6900/${id}/leaves`);
+            setLeaves(response.data);
+        } catch (error) {
+            console.error('Error fetching leaves:', error);
+        }
+    }
+
+    const loadWorker = async () => {
+        try {
+            const response = await axios.get(`http://localhost:6900/api/workers/${id}`);
+            setWorker(response.data);
+        } catch (error) {
+            console.error('Error fetching leaves:', error);
+        }
+    }
 
     const handleLogOut = () => {
         navigate("/");
     }
 
-    const handleAddLeave = () => {
-        navigate("/addleave");
+    const handleMyProfile = () => {
+        navigate(`/employee/${id}/details`);
     }
 
-    // useEffect(() => {
-    //     // Fetch workers data from backend upon component mount
-    //     // You can use fetch or axios for making HTTP requests
-    //     // Update workers state with the fetched data
-    // }, []);
-
-    // const handleCreate = () => {
-    //     // Implement create operation
-    // };
-
-    // const handleUpdate = (username) => {
-    //     // Implement update operation
-    // };
-
-    // const handleDelete = (username) => {
-    //     // Implement delete operation
-    // };
+    const handleAddLeave = () => {
+        navigate(`/employee/${id}/addleave`);
+    }
 
     return (
         <div>
@@ -52,29 +55,25 @@ const EmployeeDashboard = () => {
                     <div className="navbar-end">
                         <div className="navbar-item">
                             <div className="buttons">
-                                <button className="button is-primary" onClick={handleAddLeave} style={{ marginRight: '10px', borderRadius: '9px', height: '45px', fontSize: '18px' }}>
-                                    <strong>Add Leave</strong>
-                                </button>
-                                <button className="button is-primary" onClick={handleLogOut} style={{ marginRight: '30px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
-                                    <strong>Logout</strong>
-                                </button>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <button className="button is-primary" onClick={handleAddLeave} style={{ marginRight: '10px', borderRadius: '9px', height: '45px', fontSize: '18px' }}>
+                                        <strong>Add Leave</strong>
+                                    </button>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="primary" id="dropdown-basic " style={{ marginRight: '20px' }}>
+                                            <strong>{worker.userName}</strong>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item onClick={handleMyProfile}>My Profile</Dropdown.Item>
+                                            <Dropdown.Item onClick={handleLogOut}>Logout</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </nav>
-
-
-            {/* <button onClick={handleCreate}>Create Worker</button>
-            <ul>
-                {workers.map((worker) => (
-                    <li key={worker.username}>
-                        {worker.username} - {worker.designation}
-                        <button onClick={() => handleUpdate(worker.username)}>Edit</button>
-                        <button onClick={() => handleDelete(worker.username)}>Delete</button>
-                    </li>
-                ))}
-            </ul> */}
 
             <div className='mt-4'>
                 <TableDataForEmployee leaveList={leaves} />
@@ -84,4 +83,4 @@ const EmployeeDashboard = () => {
     )
 }
 
-export default EmployeeDashboard
+export default EmployeeDashboard;

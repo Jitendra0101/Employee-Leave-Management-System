@@ -27,7 +27,7 @@ function Login() {
                     break;
 
                 case "EMPLOYEE":
-                    navigate("/employee", { state: { loggedIn: loggedIn } });
+                    navigate(`/employee/${worker.id}`, { state: { loggedIn: loggedIn } });
                     break;
 
                 case "HR":
