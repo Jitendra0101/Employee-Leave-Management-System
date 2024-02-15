@@ -1,0 +1,28 @@
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    color:white;
+    align-items: center; /* Vertically center elements */
+    margin: 10%;
+  }
+.btns{
+    gap: 1rem;
+}
+.container-fluid{
+  background-color: rgb(6, 1, 30);
+}
+.container-fluid ul li a{
+  font-family: 'Courier New', Courier, monospace;
+  color: #ffffff;
+  list-style: none;
+}
+.container-fluid ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.container-fluid a a{
+  color: white;
+  list-style: none;
+  gap: 1rem;
+}
