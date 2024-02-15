@@ -1,8 +1,8 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://jitendrarl2001:CAtYXfgF46zUp3wU@mymongodbserver.qayhlyg.mongodb.net/?retryWrites=true&w=majority
-      database: project
+      uri: mongodb+srv://${env.MONGO_USER}:${env.MONGO_PASSWORD}@${env.MONGO_CLUSTER}/?retryWrites=true&w=majority
+      database: ${env.MONGO_DATABASE}
 
 server:
   port: 6900
