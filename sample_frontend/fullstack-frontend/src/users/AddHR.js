@@ -1,0 +1,64 @@
+import axios from 'axios'
+import React, { useState } from 'react'
+import {Link, useNavigate } from 'react-router-dom'
+import NavbarAD from '../layout/AdminLayout/NavbarAD'
+import "../CSS/Login.css"
+
+export default function AddHr() {
+  
+  let navigate = useNavigate()
+
+  const [user, setUser] = useState({
+    name:"",
+    username:"",
+    email:""
+  })
+
+  const{name, username, email}=user
+
+  const onInputChange=(e)=>{
+    setUser({...user,[e.target.name]: e.target.value})  //spread operator keeps on adding new objects
+  }
+
+  const onSubmit= async(e)=>{
+    e.preventDefault();
+    await axios.post("http://localhost:8080/user", user);
+    navigate("/")
+  }
+
+
+  return (
+    <><NavbarAD />
+    <div id="consts" className='container'>
+      
+      <div id="conts" className="container d-flex justify-content-center align-items-center" style={{height:'80vh'}}>
+        <div className='col-md-6  border rounded p-4 mt-2 shadow'>
+          <h2 className='text-center m-4'>Add HR</h2>  
+
+          <form onSubmit={(e)=>onSubmit(e)}>
+
+          
+          <div className='mb-3'>
+            <label htmlFor="Name" className='form-label'>Full Name: </label>
+            <input type={"text"} className='form-control' placeholder='Enter Full Name' name ='name' value={name}
+            onChange={(e)=>onInputChange(e)}/>
+          </div>
+          <div className='mb-3'>
+            <label htmlFor="Username" className='form-label'>User Name: </label>
+            <input type={"text"} className='form-control' placeholder='Enter User Name' name ='username' value={username}
+            onChange={(e)=>onInputChange(e)}/>
+          </div>
+          <div className='mb-3'>
+            <label htmlFor="Email" className='form-label'>E-mail: </label>
+            <input type={"text"} className='form-control' placeholder='Enter Email address' name ='email' value={email}
+            onChange={(e)=>onInputChange(e)}/>
+          </div>
+          <button type='submit' className='btn btn-outline-primary'>Submit</button>
+          <Link className='btn btn-outline-danger mx-2' to ="/home">Cancel</Link>
+          </form>
+        </div>
+      </div>
+    </div>
+    </>
+  )
+}
