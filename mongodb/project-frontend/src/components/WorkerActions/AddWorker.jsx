@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import HeaderComponent from '../HeaderComponent';
+import emailjs from 'emailjs-com';
 
 const AddWorker = () => {
 
@@ -21,7 +22,27 @@ const AddWorker = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+
+        // Send email using EmailJS
+        const templateParams = {
+            to_email: email,
+            to_name: userName,
+            to_password: password,
+            to_designation: designation
+
+        };
+
+        await emailjs.send(
+            'service_trg9i1h', // your service ID
+            'template_p9e93j8', // your template ID
+            templateParams,
+            'WGiT9_FyZ_d4Aq3nn' // your user ID
+        );
+
+        // After sending email, proceed with saving data to backend
         await axios.post("http://localhost:6900/api/workers", worker);
+
+        // Navigate back
         window.history.back();
     }
 
