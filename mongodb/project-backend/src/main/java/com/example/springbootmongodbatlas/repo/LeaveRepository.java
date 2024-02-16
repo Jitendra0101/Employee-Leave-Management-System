@@ -16,5 +16,6 @@ public interface LeaveRepository extends MongoRepository<Leave, Integer> {
 	List<Leave> findByWorkeridAndStartDate(Integer workerid, LocalDate startDate);
 	
 	List<Leave> findByWorkeridAndStatus(Integer workerid, String status);
+	
 
 }
