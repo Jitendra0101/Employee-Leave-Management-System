@@ -57,24 +57,6 @@ const HrDashboard = () => {
         navigate("/addemployee");
     }
 
-    // useEffect(() => {
-    //     // Fetch workers data from backend upon component mount
-    //     // You can use fetch or axios for making HTTP requests
-    //     // Update workers state with the fetched data
-    // }, []);
-
-    // const handleCreate = () => {
-    //     // Implement create operation
-    // };
-
-    // const handleUpdate = (username) => {
-    //     // Implement update operation
-    // };
-
-    // const handleDelete = (username) => {
-    //     // Implement delete operation
-    // };
-
     return (
         <div>
             <nav className="navbar navbar-dark bg-dark" style={{ height: '80px', paddingLeft: '20px' }}>
@@ -104,18 +86,6 @@ const HrDashboard = () => {
                     </div>
                 </div>
             </nav>
-
-
-            {/* <button onClick={handleCreate}>Create Worker</button>
-            <ul>
-                {workers.map((worker) => (
-                    <li key={worker.username}>
-                        {worker.username} - {worker.designation}
-                        <button onClick={() => handleUpdate(worker.username)}>Edit</button>
-                        <button onClick={() => handleDelete(worker.username)}>Delete</button>
-                    </li>
-                ))}
-            </ul> */}
 
             <div className='mt-4'>
                 <TableDataForHr workersList={workers} onDeleteHr={handleDeleteHr} hrid={id} />
