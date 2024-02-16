@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { listWorkers } from '../services/WorkerService';
+import axios from 'axios';
+
 
 function Login() {
     let navigate = useNavigate();
     const [loggedIn, setLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [workers, setWorkers] = useState([]);
-    const [worker, setWorker] = useState(null);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [worker, setWorker] = useState({
 
-    useEffect(() => {
-        listWorkers().then((resp) => {
-            setWorkers(resp.data);
-        }).catch(error => {
-            console.error(error);
-        });
-    }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+        userName:'',
+        password:''
+
+    });
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         if (loggedIn && worker) {
@@ -45,15 +42,25 @@ function Login() {
         navigate("/");
     }
 
-    const handleLogin = () => {
-        let foundWorker = workers.find(worker => worker.userName === username && worker.password === password);
-        if (foundWorker) {
-            setLoggedIn(true);
-            setWorker(foundWorker);
-        } else {
-            setErrorMessage('No matches found for username or password.');
+    const handleLogin = async () => {
+        const send = { userName: username, password: password };
+    
+        try {
+            const response = await axios.post("http://localhost:6900/api/workers/login", send);
+            const validWorker = response.data; // Access the data property of the response
+            
+            if (validWorker) {
+                setLoggedIn(true);
+                setWorker(validWorker);
+            } else {
+                setErrorMessage('No matches found for username or password.');
+            }
+        } catch (error) {
+            console.error("Error occurred during login:", error);
+            setErrorMessage('An error occurred during login.');
         }
     };
+    
 
     return (
         <div>

@@ -82,6 +82,15 @@ public class LeaveController {
 	public List<Leave> getLeavesByStatusPending(@PathVariable Integer workerId) {
 		return leaveService.getAllLeavesByPendingStatus(workerId, "PENDING");
 	}
+	
+	@GetMapping("/all/accepted")
+	public List<Leave> getLeavesByStatusAccepted(@PathVariable Integer workerId) {
+		return leaveService.getAllLeavesByAcceptedStatus(workerId, "ACCEPTED");
+	}
+	@GetMapping("/all/rejected")
+	public List<Leave> getLeavesByStatusRejected(@PathVariable Integer workerId) {
+		return leaveService.getAllLeavesByRejectedStatus(workerId, "REJECTED");
+	}
 
 	@PutMapping("/{id}")
 	public Leave updateStatus(@RequestBody Leave leave, @PathVariable Integer id, @PathVariable Integer workerId) {
