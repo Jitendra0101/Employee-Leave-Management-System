@@ -8,6 +8,7 @@ import com.example.springbootmongodbatlas.entity.Leave;
 import com.example.springbootmongodbatlas.entity.LeaveType;
 import com.example.springbootmongodbatlas.entity.Worker;
 import com.example.springbootmongodbatlas.exceptions.InvalidInputException;
+import com.example.springbootmongodbatlas.repo.WorkerRepository;
 import com.example.springbootmongodbatlas.service.LeaveService;
 import com.example.springbootmongodbatlas.service.WorkerService;
 
@@ -81,5 +82,33 @@ public class LeaveUtils {
 		}
 		return false;
 	}
+	
+	public static void restoreLeaveBalance(Worker worker, Leave leave,WorkerRepository workerRepository) throws InvalidInputException {
+	    
+	    LeaveType leaveType = leave.getLeaveType();
 
+	   
+	    int leaveDurationInDays = calculateLeaveDurationInDays(leave.getStartDate(), leave.getEndDate());
+
+	    
+	    switch (leaveType) {
+	        case SICK_LEAVE:
+	            worker.setSickLeaveBalance(worker.getSickLeaveBalance() + leaveDurationInDays);
+	            break;
+	        case CASUAL_LEAVE:
+	            worker.setCasualLeaveBalance(worker.getCasualLeaveBalance() + leaveDurationInDays);
+	            break;
+	        case PRIVILEGE_LEAVE:
+	            worker.setPrivilegeLeaveBalance(worker.getPrivilegeLeaveBalance() + leaveDurationInDays);
+	            break;
+	        default:
+
+	            break;
+	    }
+
+	    // Save the updated worker entity
+	    workerRepository.save(worker);
+	}
 }
+
+

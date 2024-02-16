@@ -93,9 +93,23 @@ public class LeaveController {
 	}
 
 	@PutMapping("/{id}")
-	public Leave updateStatus(@RequestBody Leave leave, @PathVariable Integer id, @PathVariable Integer workerId) {
-		Worker worker = workerService.getWorkerById(workerId);
-		return leaveService.updateStatus(leave, worker, id);
+//	public Leave updateStatus(@RequestBody Leave leave, @PathVariable Integer id, @PathVariable Integer workerId) {
+//		Worker worker = workerService.getWorkerById(workerId);
+//		return leaveService.updateStatus(leave, worker, id);
+//	}
+	public Leave updateStatus(@RequestBody Leave leave, @PathVariable Integer id, @PathVariable Integer workerId) throws InvalidInputException {
+	    Worker worker = workerService.getWorkerById(workerId);
+	    Leave existingLeave = leaveService.getLeave(id);
+	    
+	    
+	    if (leave.getStatus().equals("REJECTED")) {
+	       
+	        restoreLeaveBalance(worker, existingLeave,workerRepository);
+	    }
+
+	   
+	    Leave updatedLeave = leaveService.updateStatus(leave, worker, id);
+	    return updatedLeave;
 	}
 
 	@DeleteMapping("/{id}")
