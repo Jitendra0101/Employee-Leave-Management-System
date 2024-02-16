@@ -50,4 +50,10 @@ public class WorkerServiceImpl implements WorkerService {
 
 		return workerRepository.save(worker2);
 	}
+
+	@Override
+	public Worker getWorkerByUserNameAndPassword(String userName, String password) {
+		// TODO Auto-generated method stub
+		return workerRepository.findByUserNameAndPassword(userName, password);
+	}
 }

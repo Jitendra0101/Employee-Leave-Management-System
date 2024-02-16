@@ -21,5 +21,7 @@ public interface LeaveService {
 	public List<Leave> getAllLeavesByStartDate(Integer workerid, LocalDate startDate);
 	
 	public List<Leave> getAllLeavesByPendingStatus(Integer workerid, String status);
+	public List<Leave> getAllLeavesByAcceptedStatus(Integer workerid, String status);
+	public List<Leave> getAllLeavesByRejectedStatus(Integer workerid, String status);
 	
 }

@@ -20,7 +20,7 @@ const TableDataForHr = ({ workersList, onDeleteHr, hrid }) => {
     };
     return (
         <div>
-            <h2 className='text-center' style={{ marginBottom: '40px', marginTop: '20px' }}>Hr DashBoard</h2>
+            <h2 className='text-center' style={{ marginBottom: '40px', marginTop: '20px' }}>HR DashBoard</h2>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <table className="table table-striped table-bordered" style={{ width: 'fit-content' }}>
                     <thead>
