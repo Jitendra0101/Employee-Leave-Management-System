@@ -67,4 +67,13 @@ public class LeaveServiceImpl implements LeaveService {
 	public List<Leave> getAllLeavesByPendingStatus(Integer workerid, String status) {
 		return leaveRepository.findByWorkeridAndStatus(workerid, status);
 	}
+	
+	@Override
+	public List<Leave> getAllLeavesByAcceptedStatus(Integer workerid, String status) {
+		return leaveRepository.findByWorkeridAndStatus(workerid, status);
+	}
+	@Override
+	public List<Leave> getAllLeavesByRejectedStatus(Integer workerid, String status) {
+		return leaveRepository.findByWorkeridAndStatus(workerid, status);
+	}
 }
