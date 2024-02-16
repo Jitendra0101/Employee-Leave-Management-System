@@ -82,34 +82,30 @@ public class LeaveController {
 	public List<Leave> getLeavesByStatusPending(@PathVariable Integer workerId) {
 		return leaveService.getAllLeavesByPendingStatus(workerId, "PENDING");
 	}
-	
+
 	@GetMapping("/all/accepted")
 	public List<Leave> getLeavesByStatusAccepted(@PathVariable Integer workerId) {
 		return leaveService.getAllLeavesByAcceptedStatus(workerId, "ACCEPTED");
 	}
+
 	@GetMapping("/all/rejected")
 	public List<Leave> getLeavesByStatusRejected(@PathVariable Integer workerId) {
 		return leaveService.getAllLeavesByRejectedStatus(workerId, "REJECTED");
 	}
 
 	@PutMapping("/{id}")
-//	public Leave updateStatus(@RequestBody Leave leave, @PathVariable Integer id, @PathVariable Integer workerId) {
-//		Worker worker = workerService.getWorkerById(workerId);
-//		return leaveService.updateStatus(leave, worker, id);
-//	}
-	public Leave updateStatus(@RequestBody Leave leave, @PathVariable Integer id, @PathVariable Integer workerId) throws InvalidInputException {
-	    Worker worker = workerService.getWorkerById(workerId);
-	    Leave existingLeave = leaveService.getLeave(id);
-	    
-	    
-	    if (leave.getStatus().equals("REJECTED")) {
-	       
-	        restoreLeaveBalance(worker, existingLeave,workerRepository);
-	    }
+	public Leave updateStatus(@RequestBody Leave leave, @PathVariable Integer id, @PathVariable Integer workerId)
+			throws InvalidInputException {
+		Worker worker = workerService.getWorkerById(workerId);
+		Leave existingLeave = leaveService.getLeave(id);
 
-	   
-	    Leave updatedLeave = leaveService.updateStatus(leave, worker, id);
-	    return updatedLeave;
+		if (leave.getStatus().equals("REJECTED")) {
+
+			restoreLeaveBalance(worker, existingLeave, workerRepository);
+		}
+
+		Leave updatedLeave = leaveService.updateStatus(leave, worker, id);
+		return updatedLeave;
 	}
 
 	@DeleteMapping("/{id}")
