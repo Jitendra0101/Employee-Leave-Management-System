@@ -39,7 +39,7 @@ public class LeaveController {
 	private WorkerRepository workerRepository;
 
 	@PostMapping("/apply")
-	public Leave applyLeave(@RequestBody LeaveDto leaveDto, @PathVariable Integer workerId)
+	public String applyLeave(@RequestBody LeaveDto leaveDto, @PathVariable Integer workerId)
 			throws InvalidInputException {
 
 		LeaveType leaveType = LeaveType.valueOf(leaveDto.getLeaveType().toUpperCase());
@@ -56,16 +56,19 @@ public class LeaveController {
 		int leaveDurationInDays = calculateLeaveDurationInDays(leaveDto.getStartDate(), leaveDto.getEndDate());
 
 		if (!hasSufficientLeaveBalance(worker, leaveType, leaveDurationInDays)) {
-			return null;
+			return "Insufficient leave balance  for  " +leaveType+". Please review your leave balance and try again.";
 		}
 
-		if (doesLeaveWithSameStartDateExist(leave, worker, leaveService)) {
-			return null;
+		if (doesLeaveOverlapOrIntersect(leave, worker, leaveService)) {
+			return "Sorry, your leave request overlaps or intersects with an existing leave. Please check and adjust your leave dates and try again.";
 		}
 
 		deductLeaveBalance(worker, leaveType, leaveDurationInDays, workerService);
-
-		return leaveService.addLeave(leave, worker);
+		Leave validleave =leaveService.addLeave(leave, worker);
+		if(validleave!=null)
+			return "Leave applied successfully";
+		else
+			return "Leave request submission failed";
 	}
 
 	@GetMapping
@@ -82,20 +85,30 @@ public class LeaveController {
 	public List<Leave> getLeavesByStatusPending(@PathVariable Integer workerId) {
 		return leaveService.getAllLeavesByPendingStatus(workerId, "PENDING");
 	}
-	
+
 	@GetMapping("/all/accepted")
 	public List<Leave> getLeavesByStatusAccepted(@PathVariable Integer workerId) {
 		return leaveService.getAllLeavesByAcceptedStatus(workerId, "ACCEPTED");
 	}
+
 	@GetMapping("/all/rejected")
 	public List<Leave> getLeavesByStatusRejected(@PathVariable Integer workerId) {
 		return leaveService.getAllLeavesByRejectedStatus(workerId, "REJECTED");
 	}
 
 	@PutMapping("/{id}")
-	public Leave updateStatus(@RequestBody Leave leave, @PathVariable Integer id, @PathVariable Integer workerId) {
+	public Leave updateStatus(@RequestBody Leave leave, @PathVariable Integer id, @PathVariable Integer workerId)
+			throws InvalidInputException {
 		Worker worker = workerService.getWorkerById(workerId);
-		return leaveService.updateStatus(leave, worker, id);
+		Leave existingLeave = leaveService.getLeave(id);
+
+		if (leave.getStatus().equals("REJECTED")) {
+
+			restoreLeaveBalance(worker, existingLeave, workerRepository);
+		}
+
+		Leave updatedLeave = leaveService.updateStatus(leave, worker, id);
+		return updatedLeave;
 	}
 
 	@DeleteMapping("/{id}")
