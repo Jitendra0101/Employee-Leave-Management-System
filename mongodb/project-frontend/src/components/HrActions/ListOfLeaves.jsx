@@ -25,25 +25,25 @@ const ListOfLeaves = ({ leaveList, onAccept, onReject }) => {
                 <table className="table table-striped table-bordered" style={{ width: 'fit-content' }}>
                     <thead>
                         <tr>
-                            <th>Sr. No</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Leave Type</th>
-                            <th>Status</th>
-                            <th>Reason</th>
-                            <th>Actions</th>
+                            <th style={{ border: '1px solid black' }}>Sr. No</th>
+                            <th style={{ border: '1px solid black' }}>Start Date</th>
+                            <th style={{ border: '1px solid black' }}>End Date</th>
+                            <th style={{ border: '1px solid black' }}>Leave Type</th>
+                            <th style={{ border: '1px solid black' }}>Status</th>
+                            <th style={{ border: '1px solid black' }}>Reason</th>
+                            <th style={{ border: '1px solid black' }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {leaveList.map((leave, index) =>
                             <tr key={leave.id}>
-                                <td>{index + 1}</td>
-                                <td>{leave.startDate}</td>
-                                <td>{leave.endDate}</td>
-                                <td>{leave.leaveType}</td>
-                                <td>{leave.status}</td>
-                                <td>{leave.reason}</td>
-                                <td>
+                                <td style={{ border: '1px solid black' }}>{index + 1}</td>
+                                <td style={{ border: '1px solid black' }}>{leave.startDate}</td>
+                                <td style={{ border: '1px solid black' }}>{leave.endDate}</td>
+                                <td style={{ border: '1px solid black' }}>{leave.leaveType}</td>
+                                <td style={{ border: '1px solid black' }}>{leave.status}</td>
+                                <td style={{ border: '1px solid black' }}>{leave.reason}</td>
+                                <td style={{ border: '1px solid black' }}>
                                     <button className="btn btn-success" onClick={() => handleOnAccept(leave.id)} style={{ marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
                                         Accept
                                     </button>

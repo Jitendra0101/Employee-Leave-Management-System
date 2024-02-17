@@ -9,12 +9,11 @@ function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [worker, setWorker] = useState({
-
-        userName:'',
-        password:''
-
+        userName: '',
+        password: ''
     });
     const [errorMessage, setErrorMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false); // Add state for show/hide password
 
     useEffect(() => {
         if (loggedIn && worker) {
@@ -44,11 +43,11 @@ function Login() {
 
     const handleLogin = async () => {
         const send = { userName: username, password: password };
-    
+
         try {
             const response = await axios.post("http://localhost:6900/api/workers/login", send);
             const validWorker = response.data; // Access the data property of the response
-            
+
             if (validWorker) {
                 setLoggedIn(true);
                 setWorker(validWorker);
@@ -60,7 +59,10 @@ function Login() {
             setErrorMessage('An error occurred during login.');
         }
     };
-    
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     return (
         <div>
@@ -78,7 +80,7 @@ function Login() {
                     </div>
                 </div>
             </nav>
-            <section className="section" style={{ paddingTop: '160px', minHeight: 'calc(100vh - 80px)', backgroundImage: 'url(login.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+            <section className="section" style={{ paddingTop: '160px', minHeight: 'calc(100vh - 80px)', backgroundImage: 'url(blurred_30.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-md-5">
@@ -86,14 +88,17 @@ function Login() {
                                 <div className="card-body" >
                                     <h2 className="text-center mb-4">Login</h2>
                                     <form>
-                                        <div className="form-group mb-5"> {/* Added mb-3 class for margin bottom */}
+                                        <div className="form-group mb-5">
                                             <input type="text" className="form-control" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                                         </div>
-                                        <div className="form-group mb-4"> {/* Added mb-3 class for margin bottom */}
-                                            <input type="password" className="form-control" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                        <div className="form-group mb-4">
+                                            <div className="input-group"> {/* Wrap password input and button in input-group */}
+                                                <input type={showPassword ? "text" : "password"} className="form-control" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                                <button className="btn" type="button" style={{ backgroundColor: 'rgb(75, 130, 195)' }} onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Show"}</button>
+                                            </div>
                                         </div>
-                                        <div className="text-center mb-2"> {/* Added text-center class */}
-                                            <button type="button" className="btn" style={{ fontSize: '20px', backgroundColor: 'rgb(75, 130, 195)' }} onClick={handleLogin}>Login</button> {/* Removed btn-block class */}
+                                        <div className="text-center mb-2">
+                                            <button type="button" className="btn" style={{ fontSize: '20px', backgroundColor: 'rgb(75, 130, 195)' }} onClick={handleLogin}>Login</button>
                                         </div>
                                         {errorMessage && <p className="text-danger mt-3">{errorMessage}</p>}
                                     </form>

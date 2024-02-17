@@ -66,8 +66,10 @@ const ManageLeave = () => {
                 </div>
             </nav>
 
-            <div className='mt-4'>
-                <ListOfLeaves leaveList={leaves} onAccept={handleOnAccept} onReject={handleOnReject} />
+            <div className='section' style={{ minHeight: 'calc(100vh - 0px)', marginTop: '20px' }}>
+                <div className='mt-4'>
+                    <ListOfLeaves leaveList={leaves} onAccept={handleOnAccept} onReject={handleOnReject} />
+                </div>
             </div>
 
         </div>
