@@ -57,7 +57,11 @@ public class WorkerServiceImpl implements WorkerService {
 		return workerRepository.findByUserNameAndPassword(userName, password);
 	}
 	
-	
+	@Override
+	public Worker getWorkerByUserName(String userName) {
+
+		return workerRepository.findByUserName(userName);
+	}
 	
 	@Override
 	public Worker updatePassword(Integer id, String password) {
@@ -65,5 +69,12 @@ public class WorkerServiceImpl implements WorkerService {
 		worker.setPassword(password);
 		return workerRepository.save(worker);
 	}
+
+	@Override
+	public boolean doesWorkerExistByUserName(String userName) {
+		
+		return workerRepository.existsByUserName(userName);
+	}
+
 	
 }

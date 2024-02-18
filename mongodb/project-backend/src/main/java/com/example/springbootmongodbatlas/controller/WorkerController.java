@@ -38,6 +38,26 @@ public class WorkerController {
 	public Worker addWorker(@RequestBody Worker worker) {
 		return workerService.addWorker(worker);
 	}
+	
+	@PostMapping("/username")
+	public Worker getWorkerByUserName(@RequestBody Worker worker){
+		String userName = worker.getUserName();
+		return workerService.getWorkerByUserName(userName);
+	}	
+	
+	@PostMapping("/newusername")
+	public boolean doesWorkerExistByUserName(@RequestBody Worker worker){
+		
+		String userName = worker.getUserName();
+		
+		Worker existingWorker = workerService.getWorkerByUserName(userName);
+		if(existingWorker==null)
+			return false;
+		else 
+			return true;
+	}
+	
+	
 
 	@PutMapping("/{id}")
 	public Worker updateWorker(@RequestBody Worker worker, @PathVariable Integer id) {
@@ -58,4 +78,5 @@ public class WorkerController {
 	public Worker deleteWorker(@PathVariable Integer id) {
 		return workerService.deleteWorker(id);
 	}
-}
+	
+	}
