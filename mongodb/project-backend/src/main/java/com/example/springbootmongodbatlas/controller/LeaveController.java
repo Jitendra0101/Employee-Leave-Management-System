@@ -56,8 +56,9 @@ public class LeaveController {
 		int leaveDurationInDays = calculateLeaveDurationInDays(leaveDto.getStartDate(), leaveDto.getEndDate());
 
 		if (!hasSufficientLeaveBalance(worker, leaveType, leaveDurationInDays)) {
-			return "Insufficient leave balance  for  " +leaveType+". Please review your leave balance and try again.";
+		    return "Insufficient leave balance for " + leaveType + " for " + leaveDurationInDays + " days. Please review your leave balance and try again.";
 		}
+
 
 		if (doesLeaveOverlapOrIntersect(leave, worker, leaveService)) {
 			return "Sorry, your leave request overlaps or intersects with an existing leave. Please check and adjust your leave dates and try again.";
@@ -66,9 +67,10 @@ public class LeaveController {
 		deductLeaveBalance(worker, leaveType, leaveDurationInDays, workerService);
 		Leave validleave =leaveService.addLeave(leave, worker);
 		if(validleave!=null)
-			return "Leave applied successfully";
+			return "Leave applied successfully. " + leaveDurationInDays + " days deducted from " + leaveType + " leave balance.";
 		else
 			return "Leave request submission failed";
+		
 	}
 
 	@GetMapping
