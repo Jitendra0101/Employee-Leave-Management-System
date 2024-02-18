@@ -1,7 +1,7 @@
 package com.example.springbootmongodbatlas.utils;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.example.springbootmongodbatlas.entity.Leave;
@@ -13,35 +13,31 @@ import com.example.springbootmongodbatlas.service.LeaveService;
 import com.example.springbootmongodbatlas.service.WorkerService;
 
 public class LeaveUtils {
-//	public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate)
-//			throws InvalidInputException {
-//
-//		if (startDate.isBefore(endDate)) {
-//			Period period = Period.between(startDate, endDate);
-//
-//			int days = period.getDays();
-//			int months = period.getMonths();
-//			int years = period.getYears();
-//
-//			int totalDays = (years * 365) + (months * 30) + days;
-//
-//			return totalDays;
-//		} else {
-//			throw new InvalidInputException("leave start date must be before leave end date");
-//		}
-//
-//	}
-	 public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate)
-	            throws InvalidInputException {
+	public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate)
+            throws InvalidInputException {
 
-	        if (startDate.isBefore(endDate) || startDate.equals(endDate)) {
-	            long days = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-	            return Math.toIntExact(days);
-	        } else {
-	            throw new InvalidInputException("Leave start date must be before or equal to leave end date");
-	        }
-	    }
+        LocalDate currentDate = LocalDate.now();
 
+        if (startDate.isBefore(currentDate)) {
+            throw new InvalidInputException("Leave start date cannot be in the past");
+        }
+
+        if (startDate.isAfter(endDate)) {
+            throw new InvalidInputException("Leave start date must be before or equal to leave end date");
+        }
+
+        int days = 0;
+        LocalDate date = startDate;
+        while (!date.isAfter(endDate)) {
+            if (!(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY)) {
+                days++;
+            }
+            date = date.plusDays(1);
+        }
+
+        return days;
+    }
+	
 
 	public static boolean hasSufficientLeaveBalance(Worker worker, LeaveType leaveType, int leaveDurationInDays) {
 		// Implement logic to check if the employee has sufficient leave balance

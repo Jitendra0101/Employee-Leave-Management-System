@@ -1,10 +1,16 @@
 package com.example.springbootmongodbatlas.controller;
 
+import static com.example.springbootmongodbatlas.utils.LeaveUtils.calculateLeaveDurationInDays;
+import static com.example.springbootmongodbatlas.utils.LeaveUtils.deductLeaveBalance;
+import static com.example.springbootmongodbatlas.utils.LeaveUtils.doesLeaveOverlapOrIntersect;
+import static com.example.springbootmongodbatlas.utils.LeaveUtils.hasSufficientLeaveBalance;
+import static com.example.springbootmongodbatlas.utils.LeaveUtils.restoreLeaveBalance;
+
+import java.time.LocalDate;
 import java.util.List;
 
-import static com.example.springbootmongodbatlas.utils.LeaveUtils.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +19,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.example.springbootmongodbatlas.dto.LeaveDto;
 import com.example.springbootmongodbatlas.entity.Leave;
@@ -39,37 +44,52 @@ public class LeaveController {
 	private WorkerRepository workerRepository;
 
 	@PostMapping("/apply")
-	public String applyLeave(@RequestBody LeaveDto leaveDto, @PathVariable Integer workerId)
-			throws InvalidInputException {
+	  public String applyLeave(@RequestBody LeaveDto leaveDto, @PathVariable Integer workerId) throws InvalidInputException {
+        LocalDate startDate = leaveDto.getStartDate();
+        LocalDate endDate = leaveDto.getEndDate();
+        LeaveType leaveType;
+        try {
+            leaveType = LeaveType.valueOf(leaveDto.getLeaveType().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return "Invalid leave type. Please provide a valid leave type.";
+        }
 
-		LeaveType leaveType = LeaveType.valueOf(leaveDto.getLeaveType().toUpperCase());
-		Worker worker = workerService.getWorkerById(workerId);
+        Worker worker = workerService.getWorkerById(workerId);
 
-		Leave leave = new Leave();
+        if (startDate.isBefore(LocalDate.now())) {
+            return "Leave start date cannot be in the past";
+        }
 
-		leave.setStartDate(leaveDto.getStartDate());
-		leave.setEndDate(leaveDto.getEndDate());
-		leave.setLeaveType(leaveType);
-		leave.setReason(leaveDto.getReason());
-		leave.setWorkerid(workerId);
+        if (startDate.isAfter(endDate)) {
+            return "Leave start date must be before or equal to leave end date";
+        }
 
-		int leaveDurationInDays = calculateLeaveDurationInDays(leaveDto.getStartDate(), leaveDto.getEndDate());
+        int leaveDurationInDays = calculateLeaveDurationInDays(startDate, endDate);
 
-		if (!hasSufficientLeaveBalance(worker, leaveType, leaveDurationInDays)) {
-			return "Insufficient leave balance  for  " +leaveType+". Please review your leave balance and try again.";
-		}
+        if (!hasSufficientLeaveBalance(worker, leaveType, leaveDurationInDays)) {
+            return "Insufficient leave balance for " + leaveType + " for " + leaveDurationInDays
+                    + " days. Please review your leave balance and try again.";
+        }
 
-		if (doesLeaveOverlapOrIntersect(leave, worker, leaveService)) {
-			return "Sorry, your leave request overlaps or intersects with an existing leave. Please check and adjust your leave dates and try again.";
-		}
+        Leave leave = new Leave();
+        leave.setStartDate(startDate);
+        leave.setEndDate(endDate);
+        leave.setLeaveType(leaveType);
+        leave.setReason(leaveDto.getReason());
+        leave.setWorkerid(workerId);
 
-		deductLeaveBalance(worker, leaveType, leaveDurationInDays, workerService);
-		Leave validleave =leaveService.addLeave(leave, worker);
-		if(validleave!=null)
-			return "Leave applied successfully";
-		else
-			return "Leave request submission failed";
-	}
+        if (doesLeaveOverlapOrIntersect(leave, worker, leaveService)) {
+            return "Sorry, your leave request overlaps or intersects with an existing leave. Please check and adjust your leave dates and try again.";
+        }
+
+        deductLeaveBalance(worker, leaveType, leaveDurationInDays, workerService);
+        Leave validleave = leaveService.addLeave(leave, worker);
+        if (validleave != null)
+            return "Leave applied successfully. " + leaveDurationInDays + " days deducted from " + leaveType
+                    + " leave balance.";
+        else
+            return "Leave request submission failed";
+    }
 
 	@GetMapping
 	public List<Leave> getAllLeaves(@PathVariable Integer workerId) {
