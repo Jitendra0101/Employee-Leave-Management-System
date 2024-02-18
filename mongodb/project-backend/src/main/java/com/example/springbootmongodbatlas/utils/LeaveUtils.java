@@ -1,7 +1,7 @@
 package com.example.springbootmongodbatlas.utils;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.example.springbootmongodbatlas.entity.Leave;
@@ -13,35 +13,22 @@ import com.example.springbootmongodbatlas.service.LeaveService;
 import com.example.springbootmongodbatlas.service.WorkerService;
 
 public class LeaveUtils {
-//	public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate)
-//			throws InvalidInputException {
-//
-//		if (startDate.isBefore(endDate)) {
-//			Period period = Period.between(startDate, endDate);
-//
-//			int days = period.getDays();
-//			int months = period.getMonths();
-//			int years = period.getYears();
-//
-//			int totalDays = (years * 365) + (months * 30) + days;
-//
-//			return totalDays;
-//		} else {
-//			throw new InvalidInputException("leave start date must be before leave end date");
-//		}
-//
-//	}
-	 public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate)
-	            throws InvalidInputException {
+	public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate)
+			throws InvalidInputException {
 
-	        if (startDate.isBefore(endDate) || startDate.equals(endDate)) {
-	            long days = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-	            return Math.toIntExact(days);
-	        } else {
-	            throw new InvalidInputException("Leave start date must be before or equal to leave end date");
-	        }
-	    }
+		LocalDate currentDate = LocalDate.now();
 
+		int days = 0;
+		LocalDate date = startDate;
+		while (!date.isAfter(endDate)) {
+			if (!(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY)) {
+				days++;
+			}
+			date = date.plusDays(1);
+		}
+
+		return days;
+	}
 
 	public static boolean hasSufficientLeaveBalance(Worker worker, LeaveType leaveType, int leaveDurationInDays) {
 		// Implement logic to check if the employee has sufficient leave balance
@@ -92,62 +79,58 @@ public class LeaveUtils {
 		}
 		return false;
 	}
-	
+
 	public static boolean doesLeaveOverlapOrIntersect(Leave newLeave, Worker worker, LeaveService leaveService) {
 
-	    Integer workerId = worker.getId();
-	    LocalDate newLeaveStartDate = newLeave.getStartDate();
-	    LocalDate newLeaveEndDate = newLeave.getEndDate();
+		Integer workerId = worker.getId();
+		LocalDate newLeaveStartDate = newLeave.getStartDate();
+		LocalDate newLeaveEndDate = newLeave.getEndDate();
 
-	    
-	    List<Leave> existingLeaves = leaveService.getAllLeaves(workerId);
+		List<Leave> existingLeaves = leaveService.getAllLeaves(workerId);
 
-	    for (Leave existingLeave : existingLeaves) {
-	       
-	        if (existingLeave.getStatus().equals("REJECTED")) {
-	            continue;
-	        }
+		for (Leave existingLeave : existingLeaves) {
 
-	        LocalDate existingLeaveStartDate = existingLeave.getStartDate();
-	        LocalDate existingLeaveEndDate = existingLeave.getEndDate();
+			if (existingLeave.getStatus().equals("REJECTED")) {
+				continue;
+			}
 
-	        
-	        if ((newLeaveStartDate.isAfter(existingLeaveStartDate) && newLeaveStartDate.isBefore(existingLeaveEndDate)) ||
-	            (newLeaveEndDate.isAfter(existingLeaveStartDate) && newLeaveEndDate.isBefore(existingLeaveEndDate)) ||
-	            newLeaveStartDate.isEqual(existingLeaveStartDate) || newLeaveEndDate.isEqual(existingLeaveEndDate)) {
-	            return true;
-	        }
-	    }
-	    return false;
+			LocalDate existingLeaveStartDate = existingLeave.getStartDate();
+			LocalDate existingLeaveEndDate = existingLeave.getEndDate();
+
+			if ((newLeaveStartDate.isAfter(existingLeaveStartDate) && newLeaveStartDate.isBefore(existingLeaveEndDate))
+					|| (newLeaveEndDate.isAfter(existingLeaveStartDate)
+							&& newLeaveEndDate.isBefore(existingLeaveEndDate))
+					|| newLeaveStartDate.isEqual(existingLeaveStartDate)
+					|| newLeaveEndDate.isEqual(existingLeaveEndDate)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	
-	public static void restoreLeaveBalance(Worker worker, Leave leave,WorkerRepository workerRepository) throws InvalidInputException {
-	    
-	    LeaveType leaveType = leave.getLeaveType();
+	public static void restoreLeaveBalance(Worker worker, Leave leave, WorkerRepository workerRepository)
+			throws InvalidInputException {
 
-	   
-	    int leaveDurationInDays = calculateLeaveDurationInDays(leave.getStartDate(), leave.getEndDate());
+		LeaveType leaveType = leave.getLeaveType();
 
-	    
-	    switch (leaveType) {
-	        case SICK_LEAVE:
-	            worker.setSickLeaveBalance(worker.getSickLeaveBalance() + leaveDurationInDays);
-	            break;
-	        case CASUAL_LEAVE:
-	            worker.setCasualLeaveBalance(worker.getCasualLeaveBalance() + leaveDurationInDays);
-	            break;
-	        case PRIVILEGE_LEAVE:
-	            worker.setPrivilegeLeaveBalance(worker.getPrivilegeLeaveBalance() + leaveDurationInDays);
-	            break;
-	        default:
+		int leaveDurationInDays = calculateLeaveDurationInDays(leave.getStartDate(), leave.getEndDate());
 
-	            break;
-	    }
+		switch (leaveType) {
+		case SICK_LEAVE:
+			worker.setSickLeaveBalance(worker.getSickLeaveBalance() + leaveDurationInDays);
+			break;
+		case CASUAL_LEAVE:
+			worker.setCasualLeaveBalance(worker.getCasualLeaveBalance() + leaveDurationInDays);
+			break;
+		case PRIVILEGE_LEAVE:
+			worker.setPrivilegeLeaveBalance(worker.getPrivilegeLeaveBalance() + leaveDurationInDays);
+			break;
+		default:
 
-	    // Save the updated worker entity
-	    workerRepository.save(worker);
+			break;
+		}
+
+		// Save the updated worker entity
+		workerRepository.save(worker);
 	}
 }
-
-

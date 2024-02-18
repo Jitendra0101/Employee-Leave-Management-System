@@ -19,5 +19,9 @@ public interface WorkerService {
 	public Worker updatePassword(Integer id, String password);
 
 	public Worker getWorkerByUserNameAndPassword(String userName,String password);
+	
+	public Worker getWorkerByUserName(String userName);
+	
+	public boolean doesWorkerExistByUserName(String userName);
 
 }
