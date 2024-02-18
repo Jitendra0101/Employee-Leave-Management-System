@@ -25,6 +25,11 @@ public class WorkerController {
 	public Worker getWorkerById(@PathVariable Integer id) {
 		return workerService.getWorkerById(id);
 	}
+	@PostMapping("/username")
+	public Worker getWorkerByUserName(@RequestBody String userName){
+		return workerService.getWorkerByUserName(userName);
+	}
+	
 	
 	@PostMapping("/login")
 	public Worker login(@RequestBody Worker worker ) {
