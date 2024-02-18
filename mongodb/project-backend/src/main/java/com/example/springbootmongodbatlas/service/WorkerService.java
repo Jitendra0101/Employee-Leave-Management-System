@@ -17,5 +17,6 @@ public interface WorkerService {
 	public Worker updateWorker(Integer id, Worker worker);
 
 	public Worker getWorkerByUserNameAndPassword(String userName,String password);
+	public Worker getWorkerByUserName(String userName);
 
 }
