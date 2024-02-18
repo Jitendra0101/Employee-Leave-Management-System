@@ -11,7 +11,7 @@ const TableDataForEmployee = ({ leaveList, empid }) => {
 
     return (
         <div>
-            <h2 className='text-center' style={{ marginBottom: '40px', marginTop: '20px' }}>My Leaves</h2>
+            <h2 className='text-center' style={{ marginBottom: '40px', marginTop: '20px', borderColor: 'rgb(33, 37, 41)', marginLeft: '650px', marginRight: '650px', backgroundColor: 'rgb(33, 37, 41)', color: 'white', borderRadius: '10px' }}>My Leaves</h2>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
                 {/* Apply Leave button */}

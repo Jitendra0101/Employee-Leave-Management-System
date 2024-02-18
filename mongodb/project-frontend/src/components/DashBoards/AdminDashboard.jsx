@@ -138,7 +138,7 @@ const AdminDashboard = () => {
             </nav>
             <section className="section" style={{ minHeight: 'calc(100vh - 80px)' }}>
                 <div className='mt-4'>
-                    <h2 className='text-center' style={{ marginBottom: '40px', marginTop: '20px' }}>Admin DashBoard</h2>
+                    <h2 className='text-center' style={{ marginBottom: '40px', marginTop: '20px', borderColor: 'rgb(33, 37, 41)', marginLeft: '600px', marginRight: '600px', backgroundColor: 'rgb(33, 37, 41)', color: 'white', borderRadius: '10px' }}>Admin DashBoard</h2>
                     <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
 
                         {/* Add a button on the top left side */}

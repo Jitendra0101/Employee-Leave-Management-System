@@ -22,9 +22,21 @@ const AddLeave = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        await axios.post(`http://localhost:6900/${id}/leaves/apply`, leave);
-        window.history.back();
+        try {
+            const response = await axios.post(`http://localhost:6900/${id}/leaves/apply`, leave);
+            // Extract the response data from the axios response object
+            const responseData = response.data;
+            // Display the returned string as a pop-up
+            alert(responseData);
+            window.history.back();
+        } catch (error) {
+            // Handle error if submission fails
+            console.error('Error submitting leave application:', error);
+            // Optionally, display an error pop-up
+            alert('Error submitting leave application. Please try again later.');
+        }
     }
+
 
     return (
         <div>

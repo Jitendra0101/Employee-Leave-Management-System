@@ -53,7 +53,6 @@ const ViewWorker = () => {
                                     <li className='list-group-item'> <b>sick leave balance: </b>{worker.sickLeaveBalance}</li>
                                     <li className='list-group-item'> <b>casual leave balance: </b>{worker.casualLeaveBalance}</li>
                                     <li className='list-group-item'> <b>privileged leave balance: </b>{worker.privilegeLeaveBalance}</li>
-                                    <li className='list-group-item'> <b>Total leaves taken: </b>{totalLeaves}</li>
                                 </ul>
                             </div>
                         </div>

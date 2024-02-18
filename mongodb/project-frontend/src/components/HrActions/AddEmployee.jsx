@@ -73,7 +73,7 @@ const AddEmployee = () => {
                                 <label htmlFor="password" className='form-label' style={{ color: 'white' }}>Password: </label>
                                 <div className="input-group">
                                     <input type={showPassword ? "text" : "password"} className='form-control' placeholder='Enter Password' name='password' value={password} onChange={onInputChange} />
-                                    <button className="btn btn-outline-secondary" type="button" onClick={togglePasswordVisibility}>
+                                    <button className="btn btn-secondary" type="button" onClick={togglePasswordVisibility}>
                                         {showPassword ? "Hide" : "Show"}
                                     </button>
                                 </div>

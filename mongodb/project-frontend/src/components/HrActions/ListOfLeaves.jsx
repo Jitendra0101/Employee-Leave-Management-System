@@ -11,7 +11,6 @@ const ListOfLeaves = ({ leaveList, onAccept, onReject }) => {
 
     const handleOnAccept = async (id) => {
         try {
-            // Update the status in the server and then update the local state
             await onAccept(id);
         } catch (error) {
             console.error(error);
@@ -35,28 +34,31 @@ const ListOfLeaves = ({ leaveList, onAccept, onReject }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {leaveList.map((leave, index) =>
-                            <tr key={leave.id}>
-                                <td style={{ border: '1px solid black' }}>{index + 1}</td>
-                                <td style={{ border: '1px solid black' }}>{leave.startDate}</td>
-                                <td style={{ border: '1px solid black' }}>{leave.endDate}</td>
-                                <td style={{ border: '1px solid black' }}>{leave.leaveType}</td>
-                                <td style={{ border: '1px solid black' }}>{leave.status}</td>
-                                <td style={{ border: '1px solid black' }}>{leave.reason}</td>
-                                <td style={{ border: '1px solid black' }}>
-                                    <button className="btn btn-success" onClick={() => handleOnAccept(leave.id)} style={{ marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
-                                        Accept
-                                    </button>
-                                    <button className="btn btn-danger" onClick={() => handleOnReject(leave.id)} style={{ marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
-                                        Reject
-                                    </button>
-                                </td>
-                            </tr>
-                        )}
+                        {leaveList
+                            .filter(leave => leave.status === "PENDING") // Filter leaves with status "PENDING"
+                            .map((leave, index) =>
+                                <tr key={leave.id}>
+                                    <td style={{ border: '1px solid black' }}>{index + 1}</td>
+                                    <td style={{ border: '1px solid black' }}>{leave.startDate}</td>
+                                    <td style={{ border: '1px solid black' }}>{leave.endDate}</td>
+                                    <td style={{ border: '1px solid black' }}>{leave.leaveType}</td>
+                                    <td style={{ border: '1px solid black' }}>{leave.status}</td>
+                                    <td style={{ border: '1px solid black' }}>{leave.reason}</td>
+                                    <td style={{ border: '1px solid black' }}>
+                                        <button className="btn btn-success" onClick={() => handleOnAccept(leave.id)} style={{ marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                            Accept
+                                        </button>
+                                        <button className="btn btn-danger" onClick={() => handleOnReject(leave.id)} style={{ marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                            Reject
+                                        </button>
+                                    </td>
+                                </tr>
+                            )}
                     </tbody>
                 </table>
             </div>
         </div>
+
     );
 };
 

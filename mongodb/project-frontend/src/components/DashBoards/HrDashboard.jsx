@@ -127,7 +127,7 @@ const HrDashboard = () => {
                             <div className="buttons">
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Dropdown>
-                                        <Dropdown.Toggle variant="primary" id="dropdown-basic" style={{ marginRight: '30px', borderRadius: '9px', width: '100px', height: '45px', fontSize: '18px', backgroundColor: 'white', color: 'black', border: 'solid' }}>
+                                        <Dropdown.Toggle variant="primary" id="dropdown-basic" style={{ marginRight: '30px', borderRadius: '9px', width: '110px', height: '45px', fontSize: '18px', backgroundColor: 'white', color: 'black', border: 'solid' }}>
                                             <strong>{hr.userName}</strong>
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
@@ -144,7 +144,7 @@ const HrDashboard = () => {
 
             <section className="section" style={{ minHeight: 'calc(100vh - 80px)' }}>
                 <div className='mt-4'>
-                    <h2 className='text-center' style={{ marginBottom: '40px', marginTop: '20px' }}>HR DashBoard</h2>
+                    <h2 className='text-center' style={{ marginBottom: '40px', marginTop: '20px', borderColor: 'rgb(33, 37, 41)', marginLeft: '620px', marginRight: '620px', backgroundColor: 'rgb(33, 37, 41)', color: 'white', borderRadius: '10px' }}>HR DashBoard</h2>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <button className="btn btn-secondary" onClick={handleAddEmployee} style={{ marginBottom: '10px', marginRight: '1145px', borderRadius: '9px', width: '150px', height: '45px', fontSize: '18px', border: 'solid', borderColor: 'black' }}>
                             Add Employee
@@ -170,24 +170,32 @@ const HrDashboard = () => {
                                         <td style={{ border: '1px solid black' }}>{worker.email}</td>
                                         <td style={{ border: '1px solid black' }}>{worker.designation}</td>
                                         <td style={{ border: '1px solid black' }}>{worker.joinDate}</td>
-                                        <td style={{ border: '1px solid black', textAlign: 'center' }}>
-                                            <Link className="btn btn-secondary" to={`/viewworker/${worker.id}`} style={{ marginLeft: '10px', marginRight: '20px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                        <td style={{ border: '1px solid black', textAlign: 'center', display: 'flex', alignItems: 'left', justifyContent: 'left' }}>
+                                            <Link className="btn btn-secondary" to={`/viewworker/${worker.id}`} style={{ marginLeft: '10px', marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
                                                 View
                                             </Link>
-                                            <Link className="btn btn-secondary" to={`/editworker/${worker.id}`} style={{ marginRight: '20px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                            <Link className="btn btn-secondary" to={`/editworker/${worker.id}`} style={{ marginLeft: '10px', marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
                                                 Edit
                                             </Link>
-                                            <Link className="btn btn-secondary" to={`/hr/${id}/manageleave/${worker.id}`} style={{ marginRight: '20px', borderRadius: '9px', width: '145px', height: '45px', fontSize: '18px' }}>
-                                                Manage Leave
-                                            </Link>
-                                            <button className="btn btn-danger" onClick={() => handleDeleteConfirmation(worker)} style={{ marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                            <button className="btn btn-danger" onClick={() => handleDeleteConfirmation(worker)} style={{ marginLeft: '10px', marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
                                                 Delete
                                             </button>
+                                            {/* Check if there are any pending leaves */}
+                                            {worker.leaves.some(leave => leave.status === "PENDING") && (
+                                                // Redirect to manageLeave URL if there are pending leaves
+                                                <Link className="btn btn-secondary" to={`/hr/${id}/manageleave/${worker.id}`} style={{ marginLeft: '10px', marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
+                                                    Leaves
+                                                </Link>
+                                            )}
                                         </td>
+
                                     </tr>
                                 )}
                             </tbody>
                         </table>
+                    </div>
+                    <div style={{ marginLeft: '100px', backgroundColor: 'rgb(33, 37, 41)', border: 'solid', borderRadius: '10px', marginRight: '710px' }}>
+                        <h5 style={{ marginLeft: '10px', marginTop: '10px', color: 'white' }}>IMPORTANT: Once a Leave is Rejected or Accepted, it can NOT be changed</h5>
                     </div>
                 </div>
             </section>

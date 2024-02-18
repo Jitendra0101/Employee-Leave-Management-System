@@ -14,7 +14,7 @@ import ManageLeave from './components/HrActions/ManageLeave';
 
 function App() {
   return (
-    <div style={{ backgroundImage: 'url(theme_darker.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+    <div style={{ backgroundImage: 'url(blurred_14.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />

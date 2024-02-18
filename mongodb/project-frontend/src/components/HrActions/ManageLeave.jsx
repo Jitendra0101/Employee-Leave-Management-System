@@ -2,23 +2,54 @@ import React, { useEffect, useState } from 'react'
 import ListOfLeaves from './ListOfLeaves'
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import emailjs from 'emailjs-com';
 
 const ManageLeave = () => {
 
     const [leaves, setLeaves] = useState([]);
+    const [worker, setWorker] = useState({
+        userName: '',
+        email: '',
+        sickLeaveBalance: '',
+        casualLeaveBalance: '',
+        privilegeLeaveBalance: '',
+    });
     const { workerid } = useParams();
 
     // const { status } = leave;
 
     useEffect(() => {
         loadLeaves();
+        loadWorker();
     }, []);
 
     const handleOnAccept = async (leaveid) => {
         try {
+
+            const templateParamsforAccept = {
+                to_email: worker.email,
+                to_name: worker.userName,
+                to_sick: worker.sickLeaveBalance,
+                to_casual: worker.casualLeaveBalance,
+                to_privileged: worker.privilegeLeaveBalance,
+                to_status: "ACCEPTED"
+            };
+
+            await emailjs.send(
+                'service_trg9i1h', // your service ID
+                'template_nuxow9t', // your template ID
+                templateParamsforAccept,
+                'WGiT9_FyZ_d4Aq3nn' // your user ID
+            );
+
             const updatedLeave = { status: "ACCEPTED" };
             await axios.put(`http://localhost:6900/${workerid}/leaves/${leaveid}`, updatedLeave);
+            loadWorker();
             loadLeaves();
+
+            alert("successfully sent to the worker's email !!")
+            window.history.back();
+
         } catch (error) {
             console.error(error);
         }
@@ -28,13 +59,44 @@ const ManageLeave = () => {
         try {
             const updatedLeave = { status: "REJECTED" };
             await axios.put(`http://localhost:6900/${workerid}/leaves/${leaveid}`, updatedLeave);
+
+            loadWorker();
             loadLeaves();
+
+            const templateParamsforReject = {
+                to_email: worker.email,
+                to_name: worker.userName,
+                to_sick: worker.sickLeaveBalance,
+                to_casual: worker.casualLeaveBalance,
+                to_privileged: worker.privilegeLeaveBalance,
+                to_status: "REJECTED"
+            };
+
+            await emailjs.send(
+                'service_trg9i1h', // your service ID
+                'template_nuxow9t', // your template ID
+                templateParamsforReject,
+                'WGiT9_FyZ_d4Aq3nn' // your user ID
+            );
+
+            alert("successfully sent to the worker's email !!")
+            window.history.back();
+
         } catch (error) {
             console.error(error);
         }
     };
 
 
+    const loadWorker = async () => {
+        try {
+            const resp = await axios.get(`http://localhost:6900/api/workers/${workerid}`);
+            setWorker(resp.data);
+        }
+        catch (error) {
+            console.error(`Error fetching worker:`, error);
+        }
+    }
 
     const loadLeaves = async () => {
         try {

@@ -80,7 +80,7 @@ function Login() {
                     </div>
                 </div>
             </nav>
-            <section className="section" style={{ paddingTop: '160px', minHeight: 'calc(100vh - 80px)', backgroundImage: 'url(blurred_30.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+            <section className="section" style={{ paddingTop: '160px', minHeight: 'calc(100vh - 80px)', backgroundImage: 'url(blurred_14.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-md-5">
