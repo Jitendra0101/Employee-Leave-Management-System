@@ -25,11 +25,6 @@ public class WorkerController {
 	public Worker getWorkerById(@PathVariable Integer id) {
 		return workerService.getWorkerById(id);
 	}
-	@PostMapping("/username")
-	public Worker getWorkerByUserName(@RequestBody String userName){
-		return workerService.getWorkerByUserName(userName);
-	}
-	
 	
 	@PostMapping("/login")
 	public Worker login(@RequestBody Worker worker ) {
@@ -47,6 +42,16 @@ public class WorkerController {
 	@PutMapping("/{id}")
 	public Worker updateWorker(@RequestBody Worker worker, @PathVariable Integer id) {
 		return workerService.updateWorker(id, worker);
+	}
+	
+	@PutMapping("/passwordUpdate/{id}")
+	public String updatePassword(@RequestBody Worker worker,@PathVariable Integer id) {
+		
+		String password = worker.getPassword();
+		if(workerService.updatePassword(id, password)!=null) {
+			return "successfully updated !!";
+		}
+		return "Could Not Update !!" ;
 	}
 
 	@DeleteMapping("/{id}")

@@ -12,6 +12,7 @@ const AddWorker = () => {
         password: '',
         joinDate: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
 
     const { userName, email, designation, password, joinDate } = worker;
 
@@ -50,6 +51,10 @@ const AddWorker = () => {
         return regex.test(password);
     }
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    }
+
     return (
         <div>
             <HeaderComponent />
@@ -65,7 +70,12 @@ const AddWorker = () => {
                             </div>
                             <div className='mb-3'>
                                 <label htmlFor="password" className='form-label' style={{ color: 'white' }}>Password: </label>
-                                <input type="password" className='form-control' placeholder='Enter Password' name='password' value={password} onChange={onInputChange} />
+                                <div className="input-group">
+                                    <input type={showPassword ? "text" : "password"} className='form-control' placeholder='Enter Password' name='password' value={password} onChange={onInputChange} />
+                                    <button className="btn btn-secondary" type="button" onClick={togglePasswordVisibility}>
+                                        {showPassword ? "Hide" : "Show"}
+                                    </button>
+                                </div>
                                 {!isPasswordValid(password) && <small className="text-danger">Password must contain at least 8 characters, including at least one number, one lowercase letter, and one uppercase letter.</small>}
                             </div>
                             <div className='mb-3'>
