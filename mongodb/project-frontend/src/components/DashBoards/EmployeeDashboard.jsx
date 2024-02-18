@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import TableDataForEmployee from '../TableData/TableDataForEmployee';
+import TableDataForEmployee from '../../TableData/TableDataForEmployee';
 import axios from 'axios';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
@@ -10,6 +10,10 @@ const EmployeeDashboard = () => {
     const [leaves, setLeaves] = useState([]);
     const [worker, setWorker] = useState({});
     const [showProfileModal, setShowProfileModal] = useState(false);
+    const [editedPassword, setEditedPassword] = useState('');
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+    const [passwordValidationMessage, setPasswordValidationMessage] = useState('');
     const { id } = useParams();
 
     useEffect(() => {
@@ -41,6 +45,40 @@ const EmployeeDashboard = () => {
 
     const handleMyProfile = () => {
         setShowProfileModal(true);
+    };
+
+    const handlePasswordChange = (e) => {
+        setEditedPassword(e.target.value);
+        validatePassword(e.target.value);
+    };
+
+    const handleEditPassword = () => {
+        setShowPasswordModal(true);
+    };
+
+    const handleUpdatePassword = async () => {
+        try {
+            const send = { password: editedPassword }
+            await axios.put(`http://localhost:6900/api/workers/passwordUpdate/${id}`, send);
+            // Update the worker state or reload the worker data
+            loadWorker();
+            setShowPasswordModal(false); // Close the password modal after successful edit
+        } catch (error) {
+            console.error('Error updating password:', error);
+        }
+    };
+
+    const isPasswordValid = (password) => {
+        const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+        return regex.test(password);
+    };
+
+    const validatePassword = (password) => {
+        if (!isPasswordValid(password)) {
+            setPasswordValidationMessage('Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one number.');
+        } else {
+            setPasswordValidationMessage('');
+        }
     };
 
     return (
@@ -84,8 +122,8 @@ const EmployeeDashboard = () => {
                 <Modal.Body>
                     <div className='container'>
                         <div className='row'>
-                            <div className='col-md-6 offset-md-3 border rounded p-4 mt-2 shadow'>
-                                <h2 className='text-center m-4'>Profile Details</h2>
+                            <div className='col-md-6 offset-md-3 border rounded p-4 mt-2 shadow' style={{ backgroundColor: 'rgb(33, 37, 41)' }}>
+                                <h2 className='text-center m-4' style={{ color: 'white' }}>Profile Details</h2>
                                 <div className='card'>
                                     <div className='card-header'>
                                         Details:
@@ -100,11 +138,45 @@ const EmployeeDashboard = () => {
                                             <li className='list-group-item'> <b>Privileged Leave Balance: </b>{worker.privilegeLeaveBalance}</li>
                                         </ul>
                                     </div>
+                                    <div className='card-footer'>
+                                        <button className='btn btn-secondary' onClick={handleEditPassword}>Edit Password</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </Modal.Body>
+            </Modal>
+
+            <Modal show={showPasswordModal} onHide={() => setShowPasswordModal(false)} style={{ backgroundColor: 'rgb(0,0,0,.7)' }}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Password</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <label htmlFor="editedPassword">New Password:</label>
+                    <div className="input-group">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            id="editedPassword"
+                            className="form-control"
+                            value={editedPassword}
+                            onChange={handlePasswordChange}
+                        />
+                        <div className="input-group-append">
+                            <button
+                                className="btn btn-outline-secondary"
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
+                    </div>
+                    <p className="text-danger mt-2">{passwordValidationMessage}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-secondary" onClick={handleUpdatePassword}>Update Password</button>
+                </Modal.Footer>
             </Modal>
         </div>
     );

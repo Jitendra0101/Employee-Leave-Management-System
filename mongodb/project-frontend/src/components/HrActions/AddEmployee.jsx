@@ -14,6 +14,8 @@ const AddEmployee = () => {
         joinDate: ''
     });
 
+    const [showPassword, setShowPassword] = useState(false);
+
     const { userName, email, designation, password, joinDate } = worker;
 
     const onInputChange = (e) => {
@@ -34,7 +36,6 @@ const AddEmployee = () => {
             to_name: userName,
             to_password: password,
             to_designation: designation
-
         };
 
         await emailjs.send(
@@ -51,6 +52,10 @@ const AddEmployee = () => {
         window.history.back();
     }
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    }
+
     return (
         <div>
             <HeaderComponent />
@@ -60,14 +65,18 @@ const AddEmployee = () => {
                         <h2 className='text-center m-4' style={{ color: 'white' }}>Add Employee</h2>
 
                         <form onSubmit={onSubmit}>
-
                             <div className='mb-3'>
                                 <label htmlFor="userName" className='form-label' style={{ color: 'white' }}>User Name: </label>
                                 <input type="text" className='form-control' placeholder='Enter User Name' name='userName' value={userName} onChange={onInputChange} />
                             </div>
                             <div className='mb-1'>
                                 <label htmlFor="password" className='form-label' style={{ color: 'white' }}>Password: </label>
-                                <input type="password" className='form-control' placeholder='Enter Password' name='password' value={password} onChange={onInputChange} />
+                                <div className="input-group">
+                                    <input type={showPassword ? "text" : "password"} className='form-control' placeholder='Enter Password' name='password' value={password} onChange={onInputChange} />
+                                    <button className="btn btn-outline-secondary" type="button" onClick={togglePasswordVisibility}>
+                                        {showPassword ? "Hide" : "Show"}
+                                    </button>
+                                </div>
                                 {!isPasswordValid(password) && <small className="text-danger">Password must contain at least 8 characters, including at least one number, one lowercase letter, and one uppercase letter.</small>}
                             </div>
                             <div className='mb-3'>
