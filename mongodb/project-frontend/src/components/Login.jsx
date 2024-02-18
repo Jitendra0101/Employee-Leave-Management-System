@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-
+import emailjs from 'emailjs-com';
 
 function Login() {
     let navigate = useNavigate();
@@ -12,8 +12,15 @@ function Login() {
         userName: '',
         password: ''
     });
+    const [foundWorker, setFoundWorker] = useState({
+        password: '',
+        userName: '',
+        email: ''
+    });
     const [errorMessage, setErrorMessage] = useState('');
-    const [showPassword, setShowPassword] = useState(false); // Add state for show/hide password
+    const [showPassword, setShowPassword] = useState(false);
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
+    const [forgotPasswordUsername, setForgotPasswordUsername] = useState('');
 
     useEffect(() => {
         if (loggedIn && worker) {
@@ -46,7 +53,7 @@ function Login() {
 
         try {
             const response = await axios.post("http://localhost:6900/api/workers/login", send);
-            const validWorker = response.data; // Access the data property of the response
+            const validWorker = response.data;
 
             if (validWorker) {
                 setLoggedIn(true);
@@ -62,6 +69,50 @@ function Login() {
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
+    };
+
+    const toggleForgotPasswordPopup = () => {
+        setShowForgotPassword(!showForgotPassword);
+    };
+
+    const handleRequestPassword = async () => {
+        const user_name = { userName: forgotPasswordUsername };
+
+        try {
+            const resp = await axios.post("http://localhost:6900/api/workers/username", user_name);
+            const validWorker = resp.data;
+
+            if (validWorker !== null) {
+                setFoundWorker(validWorker);
+
+                // Check if email is available before sending the email
+                if (validWorker.email) {
+                    const templateParams = {
+                        to_email: validWorker.email,
+                        to_name: validWorker.userName,
+                        to_password: validWorker.password
+                    };
+
+                    await emailjs.send(
+                        'service_an06lv7',
+                        'template_t81a6bn',
+                        templateParams,
+                        '6Rx65R88bYdyCP0Pq'
+                    );
+
+                    alert("Check your email for password!");
+                    toggleForgotPasswordPopup();
+                } else {
+                    alert('no matches found for username.')
+                    setErrorMessage('No matches found for username.');
+                }
+            } else {
+                setErrorMessage('No matches found for username.');
+            }
+        } catch (error) {
+            console.error("Error occurred during password request:", error);
+            setErrorMessage('An error occurred during password request.');
+        }
     };
 
     return (
@@ -92,13 +143,14 @@ function Login() {
                                             <input type="text" className="form-control" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                                         </div>
                                         <div className="form-group mb-4">
-                                            <div className="input-group"> {/* Wrap password input and button in input-group */}
+                                            <div className="input-group">
                                                 <input type={showPassword ? "text" : "password"} className="form-control" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                                 <button className="btn" type="button" style={{ backgroundColor: 'rgb(75, 130, 195)' }} onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Show"}</button>
                                             </div>
                                         </div>
                                         <div className="text-center mb-2">
                                             <button type="button" className="btn" style={{ fontSize: '20px', backgroundColor: 'rgb(75, 130, 195)' }} onClick={handleLogin}>Login</button>
+                                            <button type="button" className="btn" style={{ color: 'white' }} onClick={toggleForgotPasswordPopup}>Forgot Password?</button>
                                         </div>
                                         {errorMessage && <p className="text-danger mt-3">{errorMessage}</p>}
                                     </form>
@@ -108,6 +160,30 @@ function Login() {
                     </div>
                 </div>
             </section>
+            {showForgotPassword && (
+                <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}>
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Forgot Password</h5>
+                                <button type="button" className="close" onClick={toggleForgotPasswordPopup}>
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <label htmlFor="forgotPasswordUsername">Username</label>
+                                    <input type="text" className="form-control" id="forgotPasswordUsername" value={forgotPasswordUsername} onChange={(e) => setForgotPasswordUsername(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={handleRequestPassword}>Request Password</button>
+                                <button type="button" className="btn btn-danger" onClick={toggleForgotPasswordPopup}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

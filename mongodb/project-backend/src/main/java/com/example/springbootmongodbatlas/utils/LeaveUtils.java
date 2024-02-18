@@ -16,7 +16,7 @@ public class LeaveUtils {
 	public static int calculateLeaveDurationInDays(LocalDate startDate, LocalDate endDate)
 			throws InvalidInputException {
 
-		LocalDate currentDate = LocalDate.now();
+//		LocalDate currentDate = LocalDate.now();
 
 		int days = 0;
 		LocalDate date = startDate;

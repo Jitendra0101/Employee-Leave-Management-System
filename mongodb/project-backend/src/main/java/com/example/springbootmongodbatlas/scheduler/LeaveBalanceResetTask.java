@@ -1,3 +1,4 @@
+package com.example.springbootmongodbatlas.scheduler;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;

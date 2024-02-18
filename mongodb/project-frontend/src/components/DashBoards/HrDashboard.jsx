@@ -183,8 +183,8 @@ const HrDashboard = () => {
                                             {/* Check if there are any pending leaves */}
                                             {worker.leaves.some(leave => leave.status === "PENDING") && (
                                                 // Redirect to manageLeave URL if there are pending leaves
-                                                <Link className="btn btn-secondary" to={`/hr/${id}/manageleave/${worker.id}`} style={{ marginLeft: '10px', marginRight: '10px', borderRadius: '9px', width: '90px', height: '45px', fontSize: '18px' }}>
-                                                    Leaves
+                                                <Link className="btn btn-secondary" to={`/hr/${id}/manageleave/${worker.id}`} style={{ marginLeft: '10px', marginRight: '10px', borderRadius: '9px', width: '171px', height: '45px', fontSize: '18px' }}>
+                                                    Approval Gateway
                                                 </Link>
                                             )}
                                         </td>

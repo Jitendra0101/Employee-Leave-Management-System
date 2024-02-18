@@ -15,11 +15,25 @@ const AddEmployee = () => {
     });
 
     const [showPassword, setShowPassword] = useState(false);
+    const [usernameExists, setUsernameExists] = useState(false);
+    const [usernameChecking, setUsernameChecking] = useState(false);
 
     const { userName, email, designation, password, joinDate } = worker;
 
-    const onInputChange = (e) => {
-        setWorker({ ...worker, [e.target.name]: e.target.value });
+    const onInputChange = async (e) => {
+        const { name, value } = e.target;
+        setWorker({ ...worker, [name]: value });
+
+        if (name === 'userName' && value.trim() !== '') {
+            setUsernameChecking(true);
+            try {
+                const response = await axios.post("http://localhost:6900/api/workers/newusername", { userName: value });
+                setUsernameExists(response.data);
+            } catch (error) {
+                console.error('Error checking username:', error);
+            }
+            setUsernameChecking(false);
+        }
     }
 
     const isPasswordValid = (password) => {
@@ -29,8 +43,10 @@ const AddEmployee = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-
-        // Send email using EmailJS
+        if (usernameExists) {
+            alert('Username already exists. Please choose a different username.');
+            return;
+        }
         const templateParams = {
             to_email: email,
             to_name: userName,
@@ -39,16 +55,16 @@ const AddEmployee = () => {
         };
 
         await emailjs.send(
-            'service_trg9i1h', // your service ID
-            'template_p9e93j8', // your template ID
+            'service_trg9i1h',
+            'template_p9e93j8',
             templateParams,
-            'WGiT9_FyZ_d4Aq3nn' // your user ID
+            'WGiT9_FyZ_d4Aq3nn'
         );
 
-        // After sending email, proceed with saving data to backend
         await axios.post("http://localhost:6900/api/workers", worker);
 
-        // Navigate back
+        alert('worker added successfully');
+
         window.history.back();
     }
 
@@ -68,6 +84,8 @@ const AddEmployee = () => {
                             <div className='mb-3'>
                                 <label htmlFor="userName" className='form-label' style={{ color: 'white' }}>User Name: </label>
                                 <input type="text" className='form-control' placeholder='Enter User Name' name='userName' value={userName} onChange={onInputChange} />
+                                {usernameChecking && <small className="text-info">Checking username...</small>}
+                                {usernameExists && <small className="text-danger">Username already exists. Please choose a different username.</small>}
                             </div>
                             <div className='mb-1'>
                                 <label htmlFor="password" className='form-label' style={{ color: 'white' }}>Password: </label>
